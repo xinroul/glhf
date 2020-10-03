@@ -18,7 +18,7 @@
 			Constructor
 		*/
 		function __construct($id){
-			$id = mysqli_real_escape_string($GLOBALS['__mysql_link'], $id);
+			$id = mysqli_real_escape_string($GLOBALS['__mysql_link'], trim($id));
 			
 			$query = db_query("SELECT * FROM `accounts` WHERE `id` = '{$id}' LIMIT 1;");
 			$result = mysqli_fetch_assoc($query);
@@ -64,7 +64,7 @@
 			@return Ticket object / bool
 		*/
 		function current_tickets(){
-			if($this->is_dev || $this->is_rev){
+			if($this->is_dev() || $this->is_rev()){
 				return; ////////////////////////////////
 			}else{
 				return false;
@@ -77,7 +77,7 @@
 			@return Ticket object / bool
 		*/
 		function past_tickets(){
-			if($this->is_dev || $this->is_rev){
+			if($this->is_dev() || $this->is_rev()){
 				return; ////////////////////////////////
 			}else{
 				return false;
@@ -90,7 +90,7 @@
 			@return Ticket object / bool
 		*/
 		function all_tickets(){
-			if($this->is_dev || $this->is_rev){
+			if($this->is_dev() || $this->is_rev()){
 				return; ////////////////////////////////
 			}else{
 				return false;
