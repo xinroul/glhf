@@ -4,8 +4,8 @@
 	
 	//If already logged in
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-		//header("location: welcome.php");
-		//exit;
+		header("location: welcome.php");
+		exit;
 	}
 	
 	//Include main functions
