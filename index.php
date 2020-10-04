@@ -59,7 +59,7 @@
 		@mysqli_close($GLOBALS['__mysql_link']);
 	}
 ?>
-<!-- For cimplicity sake, form is from https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php -->
+<!-- For simplicity sake, form is from https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php -->
 <!DOCTYPE html>
 <html lang='en'>
 	<head>
