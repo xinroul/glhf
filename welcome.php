@@ -16,8 +16,6 @@
 	sql_connect();
 	
 	$account = new Account($_SESSION['username']);
-	//Close connection
-	@mysqli_close($GLOBALS['__mysql_link']);
 ?>
 
 <!DOCTYPE html>
@@ -28,12 +26,23 @@
 	</head>
 	<body>
 		<div style='float:left;'>
-			<?php echo "Welcome {$account->first_name} {$account->last_name}!"; ?>
+			<?php echo "Welcome {$account->get_full_name()}!"; ?>
 		</div>
 		<div style='float:right;'>
 			<a href='logout.php'>
 				Logout
 			</a>
 		</div>
+		<?php
+			foreach(get_tickets($_SESSION['username']) as $ticket){
+				echo "<br><br><pre>";
+				var_dump($ticket);
+				echo "</pre>";
+			}
+		?>
 	</body>
 </html>
+<?php
+	//Close connection
+	@mysqli_close($GLOBALS['mysql_link']);
+?>

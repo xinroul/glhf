@@ -23,8 +23,8 @@
 		sql_connect();
 		
 		//Extra layer of checks
-		$username = mysqli_real_escape_string($GLOBALS['__mysql_link'], trim($_POST["username"]));
-		$password = mysqli_real_escape_string($GLOBALS['__mysql_link'], trim($_POST["password"]));
+		$username = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($_POST["username"]));
+		$password = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($_POST["password"]));
 		
 		//If username is empty
 		if(empty($username)){
@@ -56,7 +56,7 @@
 		}
 		
 		//Close connection
-		@mysqli_close($GLOBALS['__mysql_link']);
+		@mysqli_close($GLOBALS['mysql_link']);
 	}
 ?>
 <!-- For simplicity sake, form is from https://www.tutorialrepublic.com/php-tutorial/php-mysql-login-system.php -->
