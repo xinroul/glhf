@@ -1,11 +1,32 @@
 //On every keystroke in the search field
 $("#ticket_search").keyup(function(){
 	filter_tickets(this.value);
+	
+	if(this.value.length > 0){;
+		$("#cancel_search").show();
+	}else{
+		$("#cancel_search").hide();
+	}
 });
 
 //On every change with the checkboxes
 $(".search_checkbox").change(function(){
 	filter_tickets($("#ticket_search")[0].value);
+});
+
+//If a tag is clicked
+$(".ticket_tag").click(function(){
+	$("#ticket_search")[0].value = $.trim(this.innerHTML); //Update search field
+	$("#search_tags").prop("checked", true); //Ensure tag checkbox is checked
+	$("#cancel_search").show() //Show 'X' field
+	filter_tickets($.trim(this.innerHTML)); //Update table
+});
+
+//Clear search field
+$("#cancel_search").click(function(){
+	$("#ticket_search")[0].value = ""; //Empty search field
+	$("#cancel_search").hide(); //Hide 'X' field
+	filter_tickets(); //Update table
 });
 
 /*

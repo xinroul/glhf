@@ -49,7 +49,7 @@
 		</div>
 		<br />
 		<br />
-		Search: <input type='text' name='ticket_search' id='ticket_search' placeholder='Search for ticket' />
+		Search: <input type='text' name='ticket_search' id='ticket_search' placeholder='Search for ticket' /> <span id='cancel_search'>X</span>
 		<input type='checkbox' id='search_id' class='search_checkbox' value=0 checked/> ID
 		<input type='checkbox' id='search_title' class='search_checkbox' value=1 /> Title
 		<input type='checkbox' id='search_tags' class='search_checkbox' value=2 /> Tags
@@ -106,13 +106,13 @@
 			foreach($all_tickets as $ticket){
 		?>
 			<tr>
-				<td onclick="location.href='#'" style='text-align:left; cursor:pointer;'>
-					<?php echo $ticket->ticket_id; ?>
+				<td onclick="location.href='#'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:center; cursor:pointer;'>
+					<?php printf('%05d', $ticket->ticket_id); ?>
 				</td>
-				<td onclick="location.href='#'" style='text-align:left; cursor:pointer;'>
+				<td onclick="location.href='#'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:left; cursor:pointer;'>
 					<?php echo $ticket->title; ?>
 				</td>
-				<td style='text-align:left;'>
+				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:left;'>
 					<?php
 						$tag_array = explode(",", $ticket->tags);
 						
@@ -126,17 +126,17 @@
 					?>
 					
 				</td>
-				<td style='text-align:center;'>
+				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->status; ?>
 				</td>
 		<?php
 			//Additional table columns based on account type
 			if(!$account->is_norm()){
 		?>
-				<td style='text-align:center;'>
+				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->assigned_to; ?>
 				</td>
-				<td style='text-align:center;'>
+				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->reviewed_by; ?>
 				</td>
 		<?php
@@ -148,6 +148,7 @@
 					 <form action='#' method='POST'>
 						<select name='developer'>
 							<option value=0>Assign developer</option>
+							<option value=0>Clear developer</option>
 					<?php
 						$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
 						

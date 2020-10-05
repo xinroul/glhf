@@ -20,4 +20,33 @@
     color: #3E3E3E;
     padding: 2px 4px;
 	margin-left: 3px;
+	cursor: pointer;
+}
+
+#cancel_search {
+	font-size: 14px;
+	color: #AD1733;
+	margin-left: -2px;
+	display: none;
+	cursor: pointer;
+}
+
+.unassigned_ticket {
+	background-color: #FFFFFF;
+}
+
+.assigned_ticket {
+	background-color: #8DD3F9;
+}
+
+.pending_ticket {
+	background-color: #FFE1A3;
+}
+
+.resolved_ticket {
+	background-color: #B3dAB1;
+}
+
+.closed_ticket {
+	background-color: #E8E8E8;
 }

@@ -72,7 +72,7 @@
 		</style>
 	</head>
 	<body>
-		<div class='wrapper'>
+		<div class='wrapper' style='padding:0 20px;'>
 			<h2>Login</h2>
 			<p>Please fill in your credentials to login.</p>
 			<form action='<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>' method='post'>
