@@ -9,8 +9,7 @@
 	}
 	
 	// Include main functions
-	require_once("include/sql_funcs.php");
-	require_once("include/Account.php");
+	require_once("include/funcs/sql_funcs.php");
 	
 	//Connect to database
 	sql_connect();
@@ -34,11 +33,10 @@
 	<head>
 		<meta charset='UTF-8'>
 		<title>Welcome</title>
-		<link rel='stylesheet' href='include/main.css'>
+		<link rel='stylesheet' href='include/css/main.css'>
 		<link rel="shortcut icon" href="#" /> <!-- Resolving favicon.ico error -->
 	</head>
 	<body>
-		<div>
 		<div style='float:left;'>
 			Welcome <a href="#"><?php echo $account->get_full_name(); ?></a>!
 		</div>
@@ -106,10 +104,10 @@
 			foreach($all_tickets as $ticket){
 		?>
 			<tr>
-				<td onclick="location.href='#'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:center; cursor:pointer;'>
+				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:center; cursor:pointer;'>
 					<?php printf('%05d', $ticket->ticket_id); ?>
 				</td>
-				<td onclick="location.href='#'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:left; cursor:pointer;'>
+				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:left; cursor:pointer;'>
 					<?php echo $ticket->title; ?>
 				</td>
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:left;'>
@@ -124,7 +122,6 @@
 					<?php
 						}
 					?>
-					
 				</td>
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->status; ?>
@@ -134,10 +131,10 @@
 			if(!$account->is_norm()){
 		?>
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
-					<?php echo $ticket->assigned_to; ?>
+					<?php echo $ticket->assigned_to->id; ?>
 				</td>
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
-					<?php echo $ticket->reviewed_by; ?>
+					<?php echo $ticket->reviewed_by->id; ?>
 				</td>
 		<?php
 			}
@@ -173,8 +170,8 @@
 		</table>
 	</body>
 </html>
-<script src='include/jquery-light-v3.5.1.js'></script>
-<script src='include/global.js'></script>
+<script src='include/js/jquery-light-v3.5.1.js'></script>
+<script src='include/js/global.js'></script>
 <?php
 	//Close connection
 	@mysqli_close($GLOBALS['mysql_link']);

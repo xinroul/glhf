@@ -4,12 +4,12 @@
 	
 	//If already logged in
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-		header("location: welcome.php");
+		header("location: all_tickets.php");
 		exit;
 	}
 	
 	//Include main functions
-	require_once("include/sql_funcs.php");
+	require_once("include/funcs/sql_funcs.php");
 	
 	//Define variables and initialize with empty values
 	$username = "";
@@ -51,8 +51,8 @@
 			$_SESSION["loggedin"] = true;
 			$_SESSION["username"] = $username;							
 			
-			//Redirect user to welcome page
-			header("location: welcome.php");
+			//Redirect user to main landing page
+			header("location: all_tickets.php");
 		}
 		
 		//Close connection

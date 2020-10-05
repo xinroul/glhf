@@ -1,5 +1,5 @@
 <?php
-	require_once("sql_funcs.php");
+	require_once("include/funcs/sql_funcs.php");
 	
 	sql_connect();
 	

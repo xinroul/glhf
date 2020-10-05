@@ -1,6 +1,5 @@
 <?php
-	require_once("sql_funcs.php");
-	require_once("Account.php");
+	require_once("include/funcs/sql_funcs.php");
 	
 	sql_connect();
 	
@@ -9,7 +8,7 @@
 	*/
 	class Ticket{
 		public $ticket_id;
-		private $created_by;
+		public $created_by;
 		
 		public $title;
 		public $description;
@@ -47,8 +46,8 @@
 				
 				//If not regular user, include the details below
 				if(!$this->viewed_by->is_norm()){
-					$this->assigned_to = $result['assigned_to'];
-					$this->reviewed_by = $result['reviewed_by'];
+					$this->assigned_to = new Account($result['assigned_to']);
+					$this->reviewed_by = new Account($result['reviewed_by']);
 				}
 			}
 		}

@@ -1,5 +1,6 @@
 <?php
-	require_once("Ticket.php");
+	require_once("include/class/ClassAccount.php");
+	require_once("include/class/ClassTicket.php");
 	/*
 		Connects to the db when required
 	*/
