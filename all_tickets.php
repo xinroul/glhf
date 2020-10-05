@@ -126,21 +126,21 @@
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->status; ?>
 				</td>
-		<?php
-			//Additional table columns based on account type
-			if(!$account->is_norm()){
-		?>
+			<?php
+				//Additional table columns based on account type
+				if(!$account->is_norm()){
+			?>
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->assigned_to->id; ?>
 				</td>
 				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
 					<?php echo $ticket->reviewed_by->id; ?>
 				</td>
-		<?php
-			}
-			
-			if($account->is_tri() || $account->is_admin()){
-		?>
+			<?php
+				}
+				
+				if($account->is_tri() || $account->is_admin()){
+			?>
 				<td style='text-align:center;'>
 					 <form action='#' method='POST'>
 						<select name='developer'>
@@ -160,9 +160,9 @@
 						<input type='submit' value='Assign' />
 					</form>
 				</td>
-		<?php
-			}
-		?>
+			<?php
+				}
+			?>
 			</tr>
 		<?php
 			}
