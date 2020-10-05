@@ -54,8 +54,15 @@
 		<input type='checkbox' id='search_title' class='search_checkbox' value=1 /> Title
 		<input type='checkbox' id='search_tags' class='search_checkbox' value=2 /> Tags
 		<input type='checkbox' id='search_status' class='search_checkbox' value=3 /> Status
+		<?php
+			//Additional table columns based on account type
+			if(!$account->is_norm()){
+		?>
 		<input type='checkbox' id='search_assigned' class='search_checkbox' value=4 /> Assigned
 		<input type='checkbox' id='search_reviewer' class='search_checkbox' value=5 /> Reviewer
+		<?php
+			}
+		?>
 		<br />
 		<br />
 		<table id='ticket_table' class='basic_table'>
