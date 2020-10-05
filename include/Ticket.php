@@ -123,7 +123,7 @@
 		*/
 		function update_dup($dup_id){
 			//Ensure only triagers can update this field
-			if($this->viewed_by->is_tri()){
+			if($this->viewed_by->is_tri() || $this->viewed_by->admin()){
 				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."' WHERE .`id` = {$this->id};");
 			}
 		}
@@ -135,7 +135,7 @@
 			$param	string
 		*/
 		function update_assign($dev_id){
-			if($this->viewed_by->is_tri()){
+			if($this->viewed_by->is_tri() || $this->viewed_by->admin()){
 				$dev_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($dev_id));
 				
 				db_query("UPDATE `tickets` SET `assigned_to` = '{$dev_id}' WHERE .`id` = {$this->id};");
@@ -149,7 +149,7 @@
 			$param	string
 		*/
 		function update_review($rev_id){
-			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri()){
+			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri() || $this->viewed_by->admin()){
 				$rev_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($rev_id));
 				
 				db_query("UPDATE `tickets` SET `reviewed_by` = '{$rev_id}' WHERE .`id` = {$this->id};");

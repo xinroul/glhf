@@ -110,6 +110,15 @@
 		}
 		
 		/*
+			Checks if the user is a triager
+			
+			@return bool
+		*/
+		function is_admin(){
+			return ($this->account_type == "admin" || $this->account_type == "administrator");
+		}
+		
+		/*
 			Returns all active tickets under the user
 			
 			@return Ticket object / bool

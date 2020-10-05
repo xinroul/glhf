@@ -1,0 +1,24 @@
+.basic_table {
+	border: 1px solid #000000;
+	border-collapse: collapse;
+	width: 1000px;
+}
+
+.basic_table tr td {
+	border: 1px solid #000000;
+	padding: 3px;
+}
+
+.basic_table tr:first-child td {
+	 background-color:#B0D8EA;
+	 font-weight: bold;
+}
+
+.ticket_tag {
+	border-radius: 2px;
+    border: 1px solid #999999;
+    font-size: 15px;
+    color: #3E3E3E;
+    padding: 2px 4px;
+	margin-left: 3px;
+}
