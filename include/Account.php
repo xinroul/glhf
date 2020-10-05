@@ -121,11 +121,23 @@
 		/*
 			Returns all active tickets under the user
 			
-			@return Ticket object / bool
+			@return Array of Ticket objects
 		*/
 		function current_tickets(){
 			if($this->is_dev() || $this->is_rev()){
-				return; ////////////////////////////////
+				$query = db_query(
+					"SELECT `id` 
+					FROM `tickets` 
+					WHERE 
+						(`assigned_to` = '{$this->id}' OR `reviewed_by` = '{$this->id}')
+						AND (`status` IN ('assigned', 'pending'));");
+				$output = [];
+				
+				while($row = mysqli_fetch_assoc($query)){
+					$output[] = new Ticket((int)$row['id'], $user);
+				}
+				
+				return $output;
 			}else{
 				return false;
 			}
@@ -134,11 +146,23 @@
 		/*
 			Returns all inactive tickets under the user
 			
-			@return Ticket object / bool
+			@return Array of Ticket objects
 		*/
 		function past_tickets(){
 			if($this->is_dev() || $this->is_rev()){
-				return; ////////////////////////////////
+				$query = db_query(
+					"SELECT `id` 
+					FROM `tickets` 
+					WHERE 
+						(`assigned_to` = '{$this->id}' OR `reviewed_by` = '{$this->id}')
+						AND (`status` IN ('resolved', 'closed'));");
+				$output = [];
+				
+				while($row = mysqli_fetch_assoc($query)){
+					$output[] = new Ticket((int)$row['id'], $user);
+				}
+				
+				return $output;
 			}else{
 				return false;
 			}
@@ -147,11 +171,21 @@
 		/*
 			Returns all tickets under the user
 			
-			@return Ticket object / bool
+			@return Array of Ticket objects
 		*/
 		function all_tickets(){
 			if($this->is_dev() || $this->is_rev()){
-				return; ////////////////////////////////
+				$query = db_query(
+					"SELECT `id` 
+					FROM `tickets` 
+					WHERE (`assigned_to` = '{$this->id}' OR `reviewed_by` = '{$this->id}');");
+				$output = [];
+				
+				while($row = mysqli_fetch_assoc($query)){
+					$output[] = new Ticket((int)$row['id'], $user);
+				}
+				
+				return $output;
 			}else{
 				return false;
 			}

@@ -145,7 +145,7 @@
 			if($account->is_tri() || $account->is_admin()){
 		?>
 				<td style='text-align:center;'>
-					 <form action='#' method='POST' id='assign_developer'>
+					 <form action='#' method='POST'>
 						<select name='developer'>
 							<option value=0>Assign developer</option>
 					<?php
@@ -158,7 +158,7 @@
 						}
 					?>
 						</select>
-						<input type='checkbox' id='confirm_assign' name='confirm_assign' value=<?php echo $ticket->ticket_id; ?> />
+						<input type='checkbox' name='confirm_assign' value=<?php echo $ticket->ticket_id; ?> />
 						<input type='submit' value='Assign' />
 					</form>
 				</td>
