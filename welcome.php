@@ -40,7 +40,7 @@
 	<body>
 		<div>
 		<div style='float:left;'>
-			<?php echo "Welcome {$account->get_full_name()}!"; ?>
+			Welcome <a href="#"><?php echo $account->get_full_name(); ?></a>!
 		</div>
 		<div style='float:right;'>
 			<a href='logout.php'>
@@ -106,10 +106,10 @@
 			foreach($all_tickets as $ticket){
 		?>
 			<tr>
-				<td style='text-align:center;'>
+				<td onclick="location.href='#'" style='text-align:left; cursor:pointer;'>
 					<?php echo $ticket->ticket_id; ?>
 				</td>
-				<td style='text-align:left;'>
+				<td onclick="location.href='#'" style='text-align:left; cursor:pointer;'>
 					<?php echo $ticket->title; ?>
 				</td>
 				<td style='text-align:left;'>
@@ -145,7 +145,22 @@
 			if($account->is_tri() || $account->is_admin()){
 		?>
 				<td style='text-align:center;'>
-					~option~ <!-- Dropdown, Checkbox, Submit -->
+					 <form action='#' method='POST' id='assign_developer'>
+						<select name='developer'>
+							<option value=0>Assign developer</option>
+					<?php
+						$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
+						
+						while($row = mysqli_fetch_assoc($query)){
+					?>
+							 <option value=<?php echo $row['id']; ?>><?php echo $row['first_name'] ." ". $row['first_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+					<?php
+						}
+					?>
+						</select>
+						<input type='checkbox' id='confirm_assign' name='confirm_assign' value=<?php echo $ticket->ticket_id; ?> />
+						<input type='submit' value='Assign' />
+					</form>
 				</td>
 		<?php
 			}

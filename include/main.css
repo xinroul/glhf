@@ -1,12 +1,11 @@
 .basic_table {
 	border: 1px solid #000000;
 	border-collapse: collapse;
-	width: 1000px;
 }
 
 .basic_table tr td {
 	border: 1px solid #000000;
-	padding: 3px;
+	padding: 3px 5px;
 }
 
 .basic_table tr:first-child td {
