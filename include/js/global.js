@@ -29,6 +29,15 @@ $("#cancel_search").click(function(){
 	filter_tickets(); //Update table
 });
 
+//When a confimation checkbox is checked
+$(".confirm_checkbox").change(function(){
+	if($(this).is(":checked")){
+		$("#confirm_" + this.value).attr("disabled", false);
+	}else{
+		$("#confirm_" + this.value).attr("disabled", true);
+	}
+});
+
 /*
 	Updates the ticket table based on search options
 

@@ -134,7 +134,11 @@
 				$output = [];
 				
 				while($row = mysqli_fetch_assoc($query)){
-					$output[] = new Ticket((int)$row['id'], $user);
+					try{
+						$output[] = new Ticket((int)$row['id'], $this->id);
+					}catch(Exception $e){
+						continue;
+					}
 				}
 				
 				return $output;
@@ -159,7 +163,11 @@
 				$output = [];
 				
 				while($row = mysqli_fetch_assoc($query)){
-					$output[] = new Ticket((int)$row['id'], $user);
+					try{
+						$output[] = new Ticket((int)$row['id'], $this->id);
+					}catch(Exception $e){
+						continue;
+					}
 				}
 				
 				return $output;
@@ -182,7 +190,11 @@
 				$output = [];
 				
 				while($row = mysqli_fetch_assoc($query)){
-					$output[] = new Ticket((int)$row['id'], $user);
+					try{
+						$output[] = new Ticket((int)$row['id'], $this->id);
+					}catch(Exception $e){
+						continue;
+					}
 				}
 				
 				return $output;

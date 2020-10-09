@@ -8,48 +8,107 @@
 	*/
 	class Ticket{
 		public $ticket_id;
-		public $created_by;
+		private $created_by;
 		
-		public $title;
-		public $description;
-		public $tags;
+		private $title;
+		private $description;
+		private $tags;
 		
-		public $status;
-		public $duplicate_of;
-		public $assigned_to;
-		public $reviewed_by;
+		private $status;
+		private $duplicate_of;
+		private $assigned_to;
+		private $reviewed_by;
 		
 		private $viewed_by;
 		
 		/*
 			Constructor
 		*/
-		function __construct($ticket_id, $user_id = NULL){
+		function __construct($ticket_id, $as_user = NULL){
 			$ticket_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($ticket_id));
 			
 			$query = db_query("SELECT * FROM `tickets` WHERE `id` = '{$ticket_id}' LIMIT 1;");
 			$result = mysqli_fetch_assoc($query);
 			
-			$this->ticket_id = $result['id'];
-			$this->title = $result['title'];
-			$this->description = $result['description'];
-			$this->created_by =  new Account($result['created_by']);
-			$this->tags = $result['tags'];
-			$this->status = $result['status'];
-			$this->duplicate_of = $result['duplicate_of'];
-			
-			if($user_id != NULL){
-				$user_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($user_id));
+			//If the ticket exists
+			if(mysqli_num_rows($query) == 1){
+				$this->ticket_id = $result['id'];
+				$this->title = $result['title'];
+				$this->description = $result['description'];
+				$this->created_by =  new Account($result['created_by']);
+				$this->tags = $result['tags'];
+				$this->status = $result['status'];
+				$this->duplicate_of = $result['duplicate_of'];
 				
-				//Get details of the user accessing the ticket
-				$this->viewed_by = new Account($user_id);
-				
-				//If not regular user, include the details below
-				if(!$this->viewed_by->is_norm()){
-					$this->assigned_to = new Account($result['assigned_to']);
-					$this->reviewed_by = new Account($result['reviewed_by']);
+				if(!is_null($as_user)){
+					//Get details of the user accessing the ticket
+					$this->viewed_by = new Account(mysqli_real_escape_string($GLOBALS['mysql_link'], trim($as_user)));
+					
+					//If not regular user, include the details below
+					if(!$this->viewed_by->is_norm()){
+						$this->assigned_to = new Account($result['assigned_to']);
+						$this->reviewed_by = new Account($result['reviewed_by']);
+					}
 				}
+			}else{
+				throw new Exception("Ticket not found.");
 			}
+		}
+		
+		/*
+			Get Account object of creator
+		*/
+		function get_created_by(){
+			return $this->created_by;
+		}
+
+		/*
+			Get title of ticket
+		*/
+		function get_title(){
+			return $this->title;
+		}
+
+		/*
+			Get description of ticket
+		*/
+		function get_description(){
+			return $this->description;
+		}
+
+		/*
+			Get tags  of ticket
+		*/
+		function get_tags(){
+			return $this->tags;
+		}
+
+		/*
+			Get status  of ticket
+		*/
+		function get_status(){
+			return $this->status;
+		}
+
+		/*
+			Get duplicate ID of ticket
+		*/
+		function get_duplicate_of(){
+			return $this->duplicate_of;
+		}
+
+		/*
+			Get developer assigned to ticket
+		*/
+		function get_assigned_to(){
+			return $this->assigned_to;
+		}
+
+		/*
+			Get reviewer assigned to ticket
+		*/
+		function get_reviewed_by(){
+			return $this->reviewed_by;
 		}
 		
 		/*

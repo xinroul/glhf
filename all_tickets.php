@@ -21,8 +21,8 @@
 	$ticket_order = ["unassigned", "assigned", "pending", "resolved", "closed"];
 	
 	usort($all_tickets, function($a, $b) use ($ticket_order){
-		$pos_a = array_search($a->status, $ticket_order);
-		$pos_b = array_search($b->status, $ticket_order);
+		$pos_a = array_search($a->get_status(), $ticket_order);
+		$pos_b = array_search($b->get_status(), $ticket_order);
 		
 		return $pos_a - $pos_b;
 	});
@@ -34,11 +34,11 @@
 		<meta charset='UTF-8'>
 		<title>Welcome</title>
 		<link rel='stylesheet' href='include/css/main.css'>
-		<link rel="shortcut icon" href="#" /> <!-- Resolving favicon.ico error -->
+		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>
 	<body>
 		<div style='float:left;'>
-			Welcome <a href="#"><?php echo $account->get_full_name(); ?></a>!
+			Welcome <a href='#'><?php echo $account->get_full_name(); ?></a>!
 		</div>
 		<div style='float:right;'>
 			<a href='logout.php'>
@@ -104,15 +104,15 @@
 			foreach($all_tickets as $ticket){
 		?>
 			<tr>
-				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:center; cursor:pointer;'>
+				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; cursor:pointer;'>
 					<?php printf('%05d', $ticket->ticket_id); ?>
 				</td>
-				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->status; ?>_ticket' style='text-align:left; cursor:pointer;'>
-					<?php echo $ticket->title; ?>
+				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left; cursor:pointer;'>
+					<?php echo $ticket->get_title(); ?>
 				</td>
-				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:left;'>
+				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left;'>
 					<?php
-						$tag_array = explode(",", $ticket->tags);
+						$tag_array = explode(",", $ticket->get_tags());
 						
 						foreach($tag_array as $tag){
 					?>
@@ -123,18 +123,18 @@
 						}
 					?>
 				</td>
-				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
-					<?php echo $ticket->status; ?>
+				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
+					<?php echo $ticket->get_status(); ?>
 				</td>
 			<?php
 				//Additional table columns based on account type
 				if(!$account->is_norm()){
 			?>
-				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
-					<?php echo $ticket->assigned_to->id; ?>
+				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
+					<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->id : ""); ?>
 				</td>
-				<td class='<?php echo $ticket->status; ?>_ticket' style='text-align:center;'>
-					<?php echo $ticket->reviewed_by->id; ?>
+				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
+					<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->id : ""); ?>
 				</td>
 			<?php
 				}
@@ -142,22 +142,22 @@
 				if($account->is_tri() || $account->is_admin()){
 			?>
 				<td style='text-align:center;'>
-					 <form action='#' method='POST'>
+					 <form action='assign_ticket.php' method='POST'>
 						<select name='developer'>
-							<option value=0>Assign developer</option>
-							<option value=0>Clear developer</option>
+							<option value='0'>Assign developer</option>
+							<option value='1'>Clear developer</option>
 					<?php
 						$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
 						
 						while($row = mysqli_fetch_assoc($query)){
 					?>
-							 <option value=<?php echo $row['id']; ?>><?php echo $row['first_name'] ." ". $row['first_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+							 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
 					<?php
 						}
 					?>
 						</select>
-						<input type='checkbox' name='confirm_assign' value=<?php echo $ticket->ticket_id; ?> />
-						<input type='submit' value='Assign' />
+						<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+						<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
 					</form>
 				</td>
 			<?php

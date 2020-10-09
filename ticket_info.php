@@ -15,7 +15,14 @@
 	sql_connect();
 	
 	$account = new Account($_SESSION['username']);
-	$ticket = new Ticket((int)$_GET['t'], $_SESSION['username']);
+	
+	try{
+		$ticket = new Ticket((int)$_GET['t'], $_SESSION['username']);
+	}catch(Exception $e){
+		header("location: all_tickets.php");
+		@mysqli_close($GLOBALS['mysql_link']);
+		exit();
+	}
 ?>
 
 <!DOCTYPE html>
@@ -24,11 +31,11 @@
 		<meta charset='UTF-8'>
 		<title>Welcome</title>
 		<link rel='stylesheet' href='include/css/main.css'>
-		<link rel="shortcut icon" href="#" /> <!-- Resolving favicon.ico error -->
+		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>
 	<body>
 		<div style='float:left;'>
-			Welcome <a href="#"><?php echo $account->get_full_name(); ?></a>!
+			Welcome <a href='#'><?php echo $account->get_full_name(); ?></a>!
 			<br />
 			<a href='all_tickets.php'>Back to main page</a>
 		</div>
@@ -42,7 +49,7 @@
 		<br />
 		<table id='ticket_details' class='basic_table'>
 			<tr>
-				<td colspan=2>
+				<td colspan='2'>
 					Viewing ticket #<?php echo (int)$_GET['t']; ?>
 				</td>
 			</tr>
@@ -51,7 +58,7 @@
 					Title:
 				</td>
 				<td>
-					<?php echo $ticket->title; ?>
+					<?php echo $ticket->get_title(); ?>
 				</td>
 			<tr>
 			<tr>
@@ -59,7 +66,7 @@
 					Description:
 				</td>
 				<td>
-					<?php echo $ticket->description; ?>
+					<?php echo $ticket->get_description(); ?>
 				</td>
 			<tr>
 			<tr>
@@ -68,7 +75,7 @@
 				</td>
 				<td>
 					<?php
-						$tag_array = explode(",", $ticket->tags);
+						$tag_array = explode(",", $ticket->get_tags());
 						
 						foreach($tag_array as $tag){
 					?>
@@ -86,7 +93,7 @@
 				</td>
 				<td>
 					<a href='#'>
-						<?php echo $ticket->created_by->get_full_name(); ?>
+						<?php echo $ticket->get_created_by()->get_full_name(); ?>
 					</a>
 				</td>
 			<tr>
@@ -94,8 +101,8 @@
 				<td>
 					Current Status:
 				</td>
-				<td class='<?php echo $ticket->status; ?>_ticket'>
-					<?php echo ucfirst($ticket->status); ?>
+				<td class='<?php echo $ticket->get_status(); ?>_ticket'>
+					<?php echo ucfirst($ticket->get_status()); ?>
 				</td>
 			<tr>
 			<?php
@@ -107,7 +114,7 @@
 				</td>
 				<td>
 					<a href='#'>
-						<?php echo $ticket->assigned_to->get_full_name(); ?>
+						<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->get_full_name() : ""); ?>
 					</a>
 				</td>
 			<tr>
@@ -117,7 +124,7 @@
 				</td>
 				<td>
 					<a href='#'>
-						<?php echo $ticket->reviewed_by->get_full_name(); ?>
+						<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
 					</a>
 				</td>
 			<tr>
@@ -131,22 +138,22 @@
 					Assign to:
 				</td>
 				<td>
-					 <form action='#' method='POST'>
+					 <form action='assign_ticket.php' method='POST'>
 						<select name='developer'>
-							<option value=0>Assign developer</option>
-							<option value=0>Clear developer</option>
+							<option value='0'>Assign developer</option>
+							<option value='1'>Clear developer</option>
 					<?php
 						$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
 						
 						while($row = mysqli_fetch_assoc($query)){
 					?>
-							 <option value=<?php echo $row['id']; ?>><?php echo $row['first_name'] ." ". $row['first_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+							 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['first_name'] ." (". $row['experience'] ." Exp)"; ?></option>
 					<?php
 						}
 					?>
 						</select>
-						<input type='checkbox' name='confirm_assign' value=<?php echo $ticket->ticket_id; ?> />
-						<input type='submit' value='Assign' />
+						<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+						<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
 					</form>
 				</td>
 			</tr>

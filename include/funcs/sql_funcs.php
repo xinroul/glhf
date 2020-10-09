@@ -32,13 +32,17 @@
 		
 		@return	Array of Ticket objects
 	*/
-	function get_tickets($user){
-		$user = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($user));
+	function get_tickets($as_user){
+		$as_user = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($as_user));
 		$query = db_query("SELECT `id` FROM `tickets`;");
 		$output = [];
 		
 		while($row = mysqli_fetch_assoc($query)){
-			$output[] = new Ticket((int)$row['id'], $user);
+			try{
+				$output[] = new Ticket((int)$row['id'], $as_user);
+			}catch(Exception $e){
+				continue;
+			}
 		}
 		
 		return $output;
