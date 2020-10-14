@@ -23,12 +23,17 @@
 			$query = db_query("SELECT * FROM `accounts` WHERE `id` = '{$id}' LIMIT 1;");
 			$result = mysqli_fetch_assoc($query);
 			
-			$this->id = $result['id'];
-			$this->first_name = $result['first_name'];
-			$this->last_name = $result['last_name'];
-			$this->dob = $result['dob'];
-			$this->account_type = $result['account_type'];
-			$this->experience = $result['experience'];
+			//If the user exists
+			if(mysqli_num_rows($query) == 1){
+				$this->id = $result['id'];
+				$this->first_name = $result['first_name'];
+				$this->last_name = $result['last_name'];
+				$this->dob = $result['dob'];
+				$this->account_type = $result['account_type'];
+				$this->experience = $result['experience'];
+			}else{
+				throw new Exception("User not found.");
+			}
 		}
 		
 		/*

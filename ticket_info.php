@@ -147,7 +147,7 @@
 						
 						while($row = mysqli_fetch_assoc($query)){
 					?>
-							 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['first_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+							 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
 					<?php
 						}
 					?>

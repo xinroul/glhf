@@ -46,8 +46,12 @@
 					
 					//If not regular user, include the details below
 					if(!$this->viewed_by->is_norm()){
-						$this->assigned_to = new Account($result['assigned_to']);
-						$this->reviewed_by = new Account($result['reviewed_by']);
+						try{
+							$this->assigned_to = new Account($result['assigned_to']);
+							$this->reviewed_by = new Account($result['reviewed_by']);
+						}catch(Exception $e){
+							//If account does not exist
+						}
 					}
 				}
 			}else{
