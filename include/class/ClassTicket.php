@@ -8,7 +8,9 @@
 	*/
 	class Ticket{
 		public $ticket_id;
+		
 		private $created_by;
+		private $created_date;
 		
 		private $title;
 		private $description;
@@ -36,6 +38,7 @@
 				$this->title = $result['title'];
 				$this->description = $result['description'];
 				$this->created_by =  new Account($result['created_by']);
+				$this->created_date = $result['created_date'];
 				$this->tags = $result['tags'];
 				$this->status = $result['status'];
 				$this->duplicate_of = $result['duplicate_of'];
@@ -64,6 +67,13 @@
 		*/
 		function get_created_by(){
 			return $this->created_by;
+		}
+		
+		/*
+			Get date of ticket creation
+		*/
+		function get_created_date(){
+			return $this->created_date;
 		}
 
 		/*

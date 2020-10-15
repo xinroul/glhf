@@ -56,8 +56,8 @@
 			//Additional table columns based on account type
 			if(!$account->is_norm()){
 		?>
-		<input type='checkbox' id='search_assigned' class='search_checkbox' value=4 /> Assigned
-		<input type='checkbox' id='search_reviewer' class='search_checkbox' value=5 /> Reviewer
+				<input type='checkbox' id='search_assigned' class='search_checkbox' value=4 /> Assigned
+				<input type='checkbox' id='search_reviewer' class='search_checkbox' value=5 /> Reviewer
 		<?php
 			}
 		?>
@@ -77,96 +77,96 @@
 				<td style='text-align:center;'>
 					Status
 				</td>
-		<?php
-			//Additional table columns based on account type
-			if(!$account->is_norm()){
-		?>
-				<td style='text-align:center;'>
-					Assigned
-				</td>
-				<td style='text-align:center;'>
-					Reviewer
-				</td>
-		<?php
-			}
-			
-			if($account->is_tri() || $account->is_admin()){
-		?>
-				<td style='text-align:center;'>
-					Assign
-				</td>
-		<?php
-			}
-		?>
+				<?php
+					//Additional table columns based on account type
+					if(!$account->is_norm()){
+				?>
+						<td style='text-align:center;'>
+							Assigned
+						</td>
+						<td style='text-align:center;'>
+							Reviewer
+						</td>
+				<?php
+					}
+					
+					if($account->is_tri() || $account->is_admin()){
+				?>
+						<td style='text-align:center;'>
+							Assign
+						</td>
+				<?php
+					}
+				?>
 			</tr>
-		<?php			
-			//For each ticket
-			foreach($all_tickets as $ticket){
-		?>
-			<tr>
-				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; cursor:pointer;'>
-					<?php printf('%05d', $ticket->ticket_id); ?>
-				</td>
-				<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left; cursor:pointer;'>
-					<?php echo $ticket->get_title(); ?>
-				</td>
-				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left;'>
+			<?php			
+				//For each ticket
+				foreach($all_tickets as $ticket){
+			?>
+				<tr>
+					<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; cursor:pointer;'>
+						<?php printf('%05d', $ticket->ticket_id); ?>
+					</td>
+					<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left; cursor:pointer;'>
+						<?php echo $ticket->get_title(); ?>
+					</td>
+					<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left;'>
+						<?php
+							$tag_array = explode(",", $ticket->get_tags());
+							
+							foreach($tag_array as $tag){
+						?>
+								<span class='ticket_tag'>
+										<?php echo $tag; ?>
+								</span>	
+						<?php
+							}
+						?>
+					</td>
+					<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
+						<?php echo $ticket->get_status(); ?>
+					</td>
 					<?php
-						$tag_array = explode(",", $ticket->get_tags());
-						
-						foreach($tag_array as $tag){
+						//Additional table columns based on account type
+						if(!$account->is_norm()){
 					?>
-					<span class='ticket_tag'>
-							<?php echo $tag; ?>
-					</span>	
+							<td <?php echo (is_object($ticket->get_assigned_to()) ? "onclick=\"location.href='account_info.php?a={$ticket->get_assigned_to()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
+								<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->get_full_name() : ""); ?>
+							</td>
+							<td <?php echo (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
+								<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
+							</td>
+					<?php
+						}
+						
+						if($account->is_tri() || $account->is_admin()){
+					?>
+							<td style='text-align:center;'>
+								<form action='assign_ticket.php' method='POST'>
+									<select name='developer'>
+										<option value='0'>Assign developer</option>
+										<option value='1'>Clear developer</option>
+										<?php
+											$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
+											
+											while($row = mysqli_fetch_assoc($query)){
+										?>
+												<option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+										<?php
+											}
+										?>
+									</select>
+									<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+									<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
+								</form>
+							</td>
 					<?php
 						}
 					?>
-				</td>
-				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
-					<?php echo $ticket->get_status(); ?>
-				</td>
-			<?php
-				//Additional table columns based on account type
-				if(!$account->is_norm()){
-			?>
-				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
-					<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->id : ""); ?>
-				</td>
-				<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
-					<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->id : ""); ?>
-				</td>
-			<?php
-				}
-				
-				if($account->is_tri() || $account->is_admin()){
-			?>
-				<td style='text-align:center;'>
-					 <form action='assign_ticket.php' method='POST'>
-						<select name='developer'>
-							<option value='0'>Assign developer</option>
-							<option value='1'>Clear developer</option>
-					<?php
-						$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
-						
-						while($row = mysqli_fetch_assoc($query)){
-					?>
-							 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
-					<?php
-						}
-					?>
-						</select>
-						<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
-						<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
-					</form>
-				</td>
+				</tr>
 			<?php
 				}
 			?>
-			</tr>
-		<?php
-			}
-		?>
 		</table>
 	</body>
 </html>
