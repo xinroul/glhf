@@ -45,7 +45,7 @@
 		<br />
 		<br />
 		<br />
-		<table id='ticket_details' class='basic_table'>
+		<table id='ticket_details' class='basic_table' style='width:60%;'>
 			<tr>
 				<td colspan='2'>
 					Viewing ticket #<?php echo (int)$_GET['t']; ?>
@@ -90,7 +90,7 @@
 					Created by:
 				</td>
 				<td>
-					<a href='#'>
+					<a href='account_info.php?a=<?php echo $ticket->get_created_by()->id; ?>'>
 						<?php echo $ticket->get_created_by()->get_full_name(); ?>
 					</a>
 				</td>
@@ -119,9 +119,7 @@
 							Assigned to:
 						</td>
 						<td>
-							<a href='#'>
-								<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->get_full_name() : ""); ?>
-							</a>
+							<?php echo (is_object($ticket->get_assigned_to()) ? "<a href='account_info.php?a={$ticket->get_assigned_to()->id}'>{$ticket->get_assigned_to()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
 					<tr>
@@ -129,9 +127,7 @@
 							Reviewed by:
 						</td>
 						<td>
-							<a href='#'>
-								<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
-							</a>
+							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
 			<?php
@@ -168,6 +164,28 @@
 			?>
 		</table>
 		<br />
+		<?php
+			$all_comments = get_comments((int)$_GET['t']);
+			
+			foreach($all_comments as $this_comment){
+				$poster = new Account($this_comment['account_id']);
+		?>
+				<table class='basic_table' style='width:60%;'>
+					<tr>
+						<td>
+							<span style='float:left'>From: <a href='account_info.php?a=<?php echo $this_comment['account_id']; ?>'><?php echo $poster->get_full_name(); ?></a></span> <span style='float:right'><?php echo date('d-M-Y', strtotime($this_comment['created_date'])); ?></span>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<?php echo $this_comment['comment']; ?>
+						</td>
+					</tr>
+				</table>
+				<br />
+		<?php
+			}
+		?>
 		<a href='all_tickets.php'>Back to main page</a>
 	</body>
 </html>

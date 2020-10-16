@@ -30,6 +30,7 @@
 	/*
 		Returns all tickets
 		
+		@param	User ID
 		@return	Array of Ticket objects
 	*/
 	function get_tickets($as_user){
@@ -43,6 +44,24 @@
 			}catch(Exception $e){
 				continue;
 			}
+		}
+		
+		return $output;
+	}
+	
+	/*
+		Gets all comments of a ticket
+		
+		@param	Ticket ID
+		@return	Array of Ticket objects
+	*/
+	function get_comments($ticket_id){
+		$ticket_id = (int)$ticket_id;
+		$query = db_query("SELECT * FROM `comments` WHERE `ticket_id` = {$ticket_id} ORDER BY `created_date` DESC;");
+		$output = [];
+		
+		while($row = mysqli_fetch_assoc($query)){
+			$output[] = $row;
 		}
 		
 		return $output;
