@@ -129,13 +129,13 @@
 			Updates the ticket title
 			Available to owner of ticket or elevated users
 			
-			$param	string
+			@param	string
 		*/
 		function update_title($new_title){
 			if($this->viewed_by->id == $this->created_by->id || !$this->viewed_by->is_norm()){
 				$new_title = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($new_title));
 				
-				db_query("UPDATE `tickets` SET `title` = '{$new_title}' WHERE .`id` = {$this->id};");
+				db_query("UPDATE `tickets` SET `title` = '{$new_title}' WHERE .`id` = {$this->ticket_id};");
 			}
 		}
 		
@@ -143,13 +143,13 @@
 			Updates the ticket description
 			Available to owner of ticket or elevated users
 			
-			$param	string
+			@param	string
 		*/
 		function update_desc($new_desc){
 			if($this->viewed_by->id == $this->created_by || !$this->viewed_by->is_norm()){
 				$new_desc = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($new_desc));
 				
-				db_query("UPDATE `tickets` SET `description` = '{$new_desc}' WHERE .`id` = {$this->id};");
+				db_query("UPDATE `tickets` SET `description` = '{$new_desc}' WHERE .`id` = {$this->ticket_id};");
 			}
 		}
 		
@@ -157,7 +157,7 @@
 			Updates the ticket tags
 			Available to owner of ticket or elevated users
 			
-			$param	string with "," delim
+			@param	string with "," delim
 		*/
 		function update_tags($new_tags){
 			if($this->viewed_by->id == $this->created_by || !$this->viewed_by->is_norm()){
@@ -169,7 +169,7 @@
 				
 				$tag_str = implode(",", $tag_array);
 				
-				db_query("UPDATE `tickets` SET `tags` = '{$tag_str}' WHERE .`id` = {$this->id};");
+				db_query("UPDATE `tickets` SET `tags` = '{$tag_str}' WHERE .`id` = {$this->ticket_id};");
 			}
 		}
 		
@@ -177,13 +177,13 @@
 			Updates the ticket status
 			Available only to developers, reviewers, and triagers
 			
-			$param	string
+			@param	string
 		*/
 		function update_status($new_status){
 			if(!$this->viewed_by->is_norm()){
 				$new_status = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($new_status));
 				
-				db_query("UPDATE `tickets` SET `status` = '{$new_status}' WHERE .`id` = {$this->id};");
+				db_query("UPDATE `tickets` SET `status` = '{$new_status}' WHERE .`id` = {$this->ticket_id};");
 			}
 		}
 		
@@ -191,12 +191,12 @@
 			Updates the ticket duplicate id
 			Available only to triagers
 			
-			$param	int
+			@param	int
 		*/
 		function update_dup($dup_id){
 			//Ensure only triagers can update this field
-			if($this->viewed_by->is_tri() || $this->viewed_by->admin()){
-				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."' WHERE .`id` = {$this->id};");
+			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
+				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."' WHERE .`id` = {$this->ticket_id};");
 			}
 		}
 		
@@ -204,13 +204,39 @@
 			Updates the ticket assignment details
 			Available only to triagers
 			
-			$param	string
+			@param	string
+			@return	bool
 		*/
-		function update_assign($dev_id){
-			if($this->viewed_by->is_tri() || $this->viewed_by->admin()){
-				$dev_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($dev_id));
+		function assign_dev($dev_id){
+			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
+				//Ensure developer exists
+				$developer = new Account(mysqli_real_escape_string($GLOBALS['mysql_link'], trim($dev_id)));
 				
-				db_query("UPDATE `tickets` SET `assigned_to` = '{$dev_id}' WHERE .`id` = {$this->id};");
+				if(!$developer->is_dev()){
+					return false;
+				}
+				
+				db_query("UPDATE `tickets` SET `assigned_to` = '{$dev_id}' WHERE `id` = {$this->ticket_id} LIMIT 1;");
+				
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		/*
+			Clears the assigned developer
+			Available only to triagers
+			
+			@return	bool
+		*/
+		function clear_dev(){
+			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
+				db_query("UPDATE `tickets` SET `assigned_to` = '' WHERE `id` = {$this->ticket_id} LIMIT 1;");
+				
+				return true;
+			}else{
+				return false;
 			}
 		}
 		
@@ -218,13 +244,40 @@
 			Updates the ticket reviewer details
 			Available only to reviewers and triagers
 			
-			$param	string
+			@param	string
+			@return	bool
 		*/
-		function update_review($rev_id){
-			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri() || $this->viewed_by->admin()){
-				$rev_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($rev_id));
+		function assigned_rev($rev_id){
+			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
+				//Ensure reviewer exists
+				$reviewer = new Account(mysqli_real_escape_string($GLOBALS['mysql_link'], trim($rev_id)));
 				
-				db_query("UPDATE `tickets` SET `reviewed_by` = '{$rev_id}' WHERE .`id` = {$this->id};");
+				if(!$reviewer->is_rev()){
+					return false;
+				}
+				
+				db_query("UPDATE `tickets` SET `reviewed_by` = '{$rev_id}' WHERE `id` = {$this->ticket_id} LIMIT 1;");
+				
+				return true;
+			}else{
+				return false;
+			}
+		}
+		
+		/*
+			Clears the assigned reviewer
+			Available only to reviewers and triagers
+			
+			@param	string
+			@return	bool
+		*/
+		function clear_rev(){
+			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
+				db_query("UPDATE `tickets` SET `reviewed_by` = '' WHERE `id` = {$this->ticket_id} LIMIT 1;");
+				
+				return true;
+			}else{
+				return false;
 			}
 		}
 	}
