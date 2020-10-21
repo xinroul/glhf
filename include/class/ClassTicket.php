@@ -27,7 +27,7 @@
 			Constructor
 		*/
 		function __construct($ticket_id, $as_user = NULL){
-			$ticket_id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($ticket_id));
+			$ticket_id = str_clean($ticket_id);
 			
 			$query = db_query("SELECT * FROM `tickets` WHERE `id` = '{$ticket_id}' LIMIT 1;");
 			$result = mysqli_fetch_assoc($query);
@@ -45,7 +45,7 @@
 				
 				if(!is_null($as_user)){
 					//Get details of the user accessing the ticket
-					$this->viewed_by = new Account(mysqli_real_escape_string($GLOBALS['mysql_link'], trim($as_user)));
+					$this->viewed_by = new Account(str_clean($as_user));
 					
 					//If not regular user, include the details below
 					if(!$this->viewed_by->is_norm()){
@@ -133,7 +133,7 @@
 		*/
 		function update_title($new_title){
 			if($this->viewed_by->id == $this->created_by->id || !$this->viewed_by->is_norm()){
-				$new_title = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($new_title));
+				$new_title = str_clean($new_title);
 				
 				db_query("UPDATE `tickets` SET `title` = '{$new_title}' WHERE .`id` = {$this->ticket_id};");
 			}
@@ -147,7 +147,7 @@
 		*/
 		function update_desc($new_desc){
 			if($this->viewed_by->id == $this->created_by || !$this->viewed_by->is_norm()){
-				$new_desc = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($new_desc));
+				$new_desc = str_clean($new_desc);
 				
 				db_query("UPDATE `tickets` SET `description` = '{$new_desc}' WHERE .`id` = {$this->ticket_id};");
 			}
@@ -164,7 +164,7 @@
 				$tag_array = explode(",", $new_tags);
 				
 				array_walk($tag_array, function(&$value, $key){
-					$value = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($value));
+					$value = str_clean($value);
 				});
 				
 				$tag_str = implode(",", $tag_array);
@@ -181,7 +181,7 @@
 		*/
 		function update_status($new_status){
 			if(!$this->viewed_by->is_norm()){
-				$new_status = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($new_status));
+				$new_status = str_clean($new_status);
 				
 				db_query("UPDATE `tickets` SET `status` = '{$new_status}' WHERE .`id` = {$this->ticket_id};");
 			}
@@ -210,7 +210,7 @@
 		function assign_dev($dev_id){
 			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
 				//Ensure developer exists
-				$developer = new Account(mysqli_real_escape_string($GLOBALS['mysql_link'], trim($dev_id)));
+				$developer = new Account(str_clean($dev_id));
 				
 				if(!$developer->is_dev()){
 					return false;
@@ -250,7 +250,7 @@
 		function assigned_rev($rev_id){
 			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
 				//Ensure reviewer exists
-				$reviewer = new Account(mysqli_real_escape_string($GLOBALS['mysql_link'], trim($rev_id)));
+				$reviewer = new Account(str_clean($rev_id));
 				
 				if(!$reviewer->is_rev()){
 					return false;

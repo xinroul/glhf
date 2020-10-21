@@ -1,11 +1,19 @@
 <?php
 	require_once("include/class/ClassAccount.php");
 	require_once("include/class/ClassTicket.php");
+	
 	/*
 		Connects to the db when required
 	*/
 	function sql_connect(){
 		$GLOBALS['mysql_link'] = mysqli_connect("localhost", "root", "", "glhf", 3306);
+	}
+	
+	/*
+		Cleans a string for SQL insertion
+	*/
+	function str_clean(&$string){
+		return mysqli_real_escape_string($GLOBALS['mysql_link'], trim($string));;
 	}
 	
 	/*
@@ -34,7 +42,7 @@
 		@return	Array of Ticket objects
 	*/
 	function get_tickets($as_user){
-		$as_user = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($as_user));
+		$as_user = str_clean($as_user);
 		$query = db_query("SELECT `id` FROM `tickets`;");
 		$output = [];
 		

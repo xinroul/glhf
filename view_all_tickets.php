@@ -37,16 +37,7 @@
 		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>
 	<body>
-		<div style='float:left;'>
-			Welcome <a href='#'><?php echo $account->get_full_name(); ?></a>!
-		</div>
-		<div style='float:right;'>
-			<a href='logout.php'>
-				Logout
-			</a>
-		</div>
-		<br />
-		<br />
+		<?php include("include/templates/header.php"); ?>
 		Search: <input type='text' name='ticket_search' id='ticket_search' placeholder='Search for ticket' /> <span id='cancel_search'>X</span>
 		<input type='checkbox' id='search_id' class='search_checkbox' value=0 checked/> ID
 		<input type='checkbox' id='search_title' class='search_checkbox' value=1 /> Title
@@ -104,10 +95,10 @@
 				foreach($all_tickets as $ticket){
 			?>
 				<tr>
-					<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; cursor:pointer;'>
+					<td onclick="location.href='view_ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; cursor:pointer;'>
 						<?php printf('%05d', $ticket->ticket_id); ?>
 					</td>
-					<td onclick="location.href='ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left; cursor:pointer;'>
+					<td onclick="location.href='view_ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left; cursor:pointer;'>
 						<?php echo $ticket->get_title(); ?>
 					</td>
 					<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left;'>
@@ -142,7 +133,7 @@
 						if($account->is_tri() || $account->is_admin()){
 					?>
 							<td style='text-align:center;'>
-								<form action='assign_ticket.php' method='POST'>
+								<form action='ticket_assign.php' method='POST'>
 									<select name='developer'>
 										<option value='0'>Assign developer</option>
 										<option value='1'>Clear developer</option>

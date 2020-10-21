@@ -18,7 +18,7 @@
 			Constructor
 		*/
 		function __construct($id){
-			$id = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($id));
+			$id = str_clean($id);
 			
 			$query = db_query("SELECT * FROM `accounts` WHERE `id` = '{$id}' LIMIT 1;");
 			$result = mysqli_fetch_assoc($query);

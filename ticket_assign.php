@@ -20,14 +20,14 @@
 	try{
 		$ticket = new Ticket($_POST['ticket_id'], $_SESSION['username']);
 	}catch(Exception $e){
-		header("location: all_tickets.php");
+		header("location: view_all_tickets.php");
 		@mysqli_close($GLOBALS['mysql_link']);
 		exit();
 	}
 	
 	//If no developer was chosen
 	if($_POST['developer'] == "0"){
-		header("location: ticket_info?t={$_POST['ticket_id']}.php");
+		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 		@mysqli_close($GLOBALS['mysql_link']);
 		exit();
 	}
@@ -36,7 +36,7 @@
 	$account = new Account($_SESSION['username']);
 	
 	if(!$account->is_tri() && !$account->is_admin()){
-		header("location: ticket_info?t={$_POST['ticket_id']}.php");
+		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 		@mysqli_close($GLOBALS['mysql_link']);
 		exit();
 	}
@@ -47,13 +47,13 @@
 	}else{
 		//If assigning a developer
 		if(!$ticket->assign_dev($_POST['developer'])){
-			header("location: ticket_info?t={$_POST['ticket_id']}.php");
+			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 			@mysqli_close($GLOBALS['mysql_link']);
 			exit();
 		}
 	}
 	
-	header("location: ticket_info?t={$_POST['ticket_id']}.php");
+	header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 	
 	//Close connection
 	@mysqli_close($GLOBALS['mysql_link']);

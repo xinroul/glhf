@@ -4,7 +4,7 @@
 	
 	//If already logged in
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
-		header("location: all_tickets.php");
+		header("location: view_all_tickets.php");
 		exit;
 	}
 	
@@ -23,8 +23,8 @@
 		sql_connect();
 		
 		//Extra layer of checks
-		$username = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($_POST["username"]));
-		$password = mysqli_real_escape_string($GLOBALS['mysql_link'], trim($_POST["password"]));
+		$username = str_clean($_POST["username"]);
+		$password = str_clean($_POST["password"]);
 		
 		//If username is empty
 		if(empty($username)){
@@ -52,7 +52,7 @@
 			$_SESSION["username"] = $username;							
 			
 			//Redirect user to main landing page
-			header("location: all_tickets.php");
+			header("location: view_all_tickets.php");
 		}
 		
 		//Close connection

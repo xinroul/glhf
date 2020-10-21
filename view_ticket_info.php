@@ -19,7 +19,7 @@
 	try{
 		$ticket = new Ticket((int)$_GET['t'], $_SESSION['username']);
 	}catch(Exception $e){
-		header("location: all_tickets.php");
+		header("location: view_all_tickets.php");
 		@mysqli_close($GLOBALS['mysql_link']);
 		exit();
 	}
@@ -34,17 +34,7 @@
 		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>
 	<body>
-		<div style='float:left;'>
-			Welcome <a href='#'><?php echo $account->get_full_name(); ?></a>!
-		</div>
-		<div style='float:right;'>
-			<a href='logout.php'>
-				Logout
-			</a>
-		</div>
-		<br />
-		<br />
-		<br />
+		<?php include("include/templates/header.php"); ?>
 		<table id='ticket_details' class='basic_table' style='width:60%;'>
 			<tr>
 				<td colspan='2'>
@@ -140,7 +130,7 @@
 							Assign to:
 						</td>
 						<td>
-							 <form action='assign_ticket.php' method='POST'>
+							 <form action='ticket_assign.php' method='POST'>
 								<select name='developer'>
 									<option value='0'>Assign developer</option>
 									<option value='1'>Clear developer</option>
@@ -186,7 +176,7 @@
 		<?php
 			}
 		?>
-		<a href='all_tickets.php'>Back to main page</a>
+		<a href='view_all_tickets.php'>Back to main page</a>
 	</body>
 </html>
 <script src='include/js/jquery-light-v3.5.1.js'></script>
