@@ -13,7 +13,7 @@
 		Cleans a string for SQL insertion
 	*/
 	function str_clean(&$string){
-		return mysqli_real_escape_string($GLOBALS['mysql_link'], trim($string));;
+		return mysqli_real_escape_string($GLOBALS['mysql_link'], trim($string));
 	}
 	
 	/*
