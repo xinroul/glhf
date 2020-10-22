@@ -7,7 +7,7 @@
 	/*
 		Test if ticket exists as seen from triager
 	*/
-	class TicketTrue extends TestCase{
+	class TicketTest extends TestCase{
 		function test_existing_ticket(){
 			//Declare test variables
 			$ticket_id = 1;
@@ -31,6 +31,7 @@
 			
 			$this->expectException(Exception::class);
 			$test2 = new Account($result['reviewed_by']);
+		}
 	}
 	
 	//Close connection
