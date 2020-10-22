@@ -27,7 +27,7 @@
 			Constructor
 		*/
 		function __construct($ticket_id, $as_user = NULL){
-			$ticket_id = str_clean($ticket_id);
+			$ticket_id = (int)$ticket_id;
 			
 			$query = db_query("SELECT * FROM `tickets` WHERE `id` = '{$ticket_id}' LIMIT 1;");
 			$result = mysqli_fetch_assoc($query);
