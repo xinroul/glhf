@@ -5,7 +5,7 @@
 	//If there is no session
 	if(!isset($_SESSION["loggedin"])){
 		header("location: index.php");
-		exit;
+		exit();
 	}
 	
 	// Include main functions

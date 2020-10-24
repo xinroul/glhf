@@ -5,7 +5,7 @@
 	//If there is no session
 	if(!isset($_SESSION["loggedin"])){
 		header("location: index.php");
-		exit;
+		exit();
 	}
 	
 	// Include main functions
@@ -120,6 +120,14 @@
 							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
+					<tr>
+						<td>
+							Duplicate of:
+						</td>
+						<td>
+							<?php echo "<a href='view_ticket_info.php?t={$ticket->get_duplicate_of()}'>{$ticket->get_duplicate_of()}</a>"; ?>
+						</td>
+					</tr>
 			<?php
 				}
 				
@@ -153,6 +161,27 @@
 				}
 			?>
 		</table>
+		<br />
+		<form action='ticket_comment.php' method='POST'>
+			<table id='make_comment' class='basic_table' style='width:60%;'>
+				<tr>
+					<td>
+						Make a comment
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<textarea name='comment' placeholder='Comment here' rows='8' style='width:97%;' required></textarea>
+					</td>
+				</tr>
+				<tr>
+					<td>
+						<input type='hidden' name='bug_id' value='<?php echo (int)$_GET['t']; ?>'>
+						<input type='submit' name='submit' value='Comment on Bug Ticket'>
+					</td>
+				</tr>
+			</table>
+		</form>
 		<br />
 		<?php
 			$all_comments = get_comments((int)$_GET['t']);

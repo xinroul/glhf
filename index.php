@@ -5,7 +5,7 @@
 	//If already logged in
 	if(isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true){
 		header("location: view_all_tickets.php");
-		exit;
+		exit();
 	}
 	
 	//Include main functions
