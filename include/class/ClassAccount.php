@@ -84,7 +84,7 @@
 			@return bool
 		*/
 		function is_norm(){
-			return ($this->account_type == "user");
+			return $this->account_type == "user";
 		}
 		
 		/*

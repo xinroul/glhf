@@ -13,6 +13,7 @@
 		Cleans a string for SQL insertion
 	*/
 	function str_clean(&$string){
+		//$GLOBALS['mysql_link'] = mysqli_connect("localhost", "root", "", "glhf", 3306);
 		return mysqli_real_escape_string($GLOBALS['mysql_link'], trim($string));
 	}
 	
@@ -23,6 +24,7 @@
 		@return	SQL query result / error
 	*/
 	function db_query($query){
+		//$GLOBALS['mysql_link'] = mysqli_connect("localhost", "root", "", "glhf", 3306);
 		$result = mysqli_query($GLOBALS['mysql_link'], $query);
 		$error = mysqli_error($GLOBALS['mysql_link']);
 		
