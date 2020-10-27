@@ -1,3 +1,8 @@
+<?php
+	if(!is_object($account)){
+		$account = new Account($_SESSION['username']);
+	}
+?>
 <div style='float:left;'>
 	Welcome 
 	<a href='#'>

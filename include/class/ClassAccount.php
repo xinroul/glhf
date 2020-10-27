@@ -128,7 +128,7 @@
 			
 			@return Array of Ticket objects
 		*/
-		function current_tickets(){
+		function active_tickets(){
 			if($this->is_dev() || $this->is_rev()){
 				$query = db_query(
 					"SELECT `id` 

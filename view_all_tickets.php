@@ -121,10 +121,10 @@
 						//Additional table columns based on account type
 						if(!$account->is_norm()){
 					?>
-							<td <?php echo (is_object($ticket->get_assigned_to()) ? "onclick=\"location.href='account_info.php?a={$ticket->get_assigned_to()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
+							<td <?php echo (is_object($ticket->get_assigned_to()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_assigned_to()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
 								<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->get_full_name() : ""); ?>
 							</td>
-							<td <?php echo (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
+							<td <?php echo (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
 								<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
 							</td>
 					<?php

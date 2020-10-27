@@ -80,7 +80,7 @@
 					Created by:
 				</td>
 				<td>
-					<a href='account_info.php?a=<?php echo $ticket->get_created_by()->id; ?>'>
+					<a href='view_account_info.php?a=<?php echo $ticket->get_created_by()->id; ?>'>
 						<?php echo $ticket->get_created_by()->get_full_name(); ?>
 					</a>
 				</td>
@@ -109,7 +109,7 @@
 							Assigned to:
 						</td>
 						<td>
-							<?php echo (is_object($ticket->get_assigned_to()) ? "<a href='account_info.php?a={$ticket->get_assigned_to()->id}'>{$ticket->get_assigned_to()->get_full_name()}</a>" : ""); ?>
+							<?php echo (is_object($ticket->get_assigned_to()) ? "<a href='view_account_info.php?a={$ticket->get_assigned_to()->id}'>{$ticket->get_assigned_to()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
 					<tr>
@@ -117,7 +117,7 @@
 							Reviewed by:
 						</td>
 						<td>
-							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
+							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
 					<tr>
@@ -192,7 +192,7 @@
 				<table class='basic_table' style='width:60%;'>
 					<tr>
 						<td>
-							<span style='float:left'>From: <a href='account_info.php?a=<?php echo $this_comment['account_id']; ?>'><?php echo $poster->get_full_name(); ?></a></span> <span style='float:right'><?php echo date('d-M-Y', strtotime($this_comment['created_date'])); ?></span>
+							<span style='float:left'>From: <a href='view_account_info.php?a=<?php echo $this_comment['account_id']; ?>'><?php echo $poster->get_full_name(); ?></a></span> <span style='float:right'><?php echo date('d-M-Y', strtotime($this_comment['created_date'])); ?></span>
 						</td>
 					</tr>
 					<tr>
