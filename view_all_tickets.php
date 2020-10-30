@@ -134,7 +134,7 @@
 							<td <?php echo (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
 								<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
 							</td>
-					<?php
+					<?php 
 						}
 						// Only assigned and unassigned status can update developers.
 						$status = $ticket->get_status();
