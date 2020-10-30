@@ -80,7 +80,7 @@
 						</td>
 				<?php
 					}
-					
+ 
 					if($account->is_tri() || $account->is_admin()){
 				?>
 						<td style='text-align:center;'>
@@ -129,8 +129,11 @@
 							</td>
 					<?php
 						}
-						
-						if($account->is_tri() || $account->is_admin()){
+						// Once assigned, don modify.
+						/*$status = $ticket->get_status();
+						 if(($account->is_tri() || $account->is_admin()) && !(strtoupper($status) == 'ASSIGNED')) */
+						 if($account->is_tri() || $account->is_admin()) {
+		
 					?>
 							<td style='text-align:center;'>
 								<form action='ticket_assign.php' method='POST'>

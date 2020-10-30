@@ -44,9 +44,17 @@
 	//If clearing the assigned developer
 	if($_POST['developer'] == "1"){
 		$ticket->clear_dev();
+		$ticket->update_status('Unassigned');
+
 	}else{
 		//If assigning a developer
 		if(!$ticket->assign_dev($_POST['developer'])){
+ 			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
+			@mysqli_close($GLOBALS['mysql_link']);
+			exit();
+		}
+		else {
+			$ticket->update_status('Assigned');
 			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 			@mysqli_close($GLOBALS['mysql_link']);
 			exit();
