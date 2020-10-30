@@ -59,6 +59,22 @@
 		return $output;
 	}
 	
+	function get_dev_tickets($as_user){
+		$as_user = str_clean($as_user);
+		$query = db_query("SELECT id FROM tickets where assigned_to = '".$as_user."';");
+		$output = [];
+		
+		while($row = mysqli_fetch_assoc($query)){
+			try{
+				$output[] = new Ticket((int)$row['id'], $as_user);
+			}catch(Exception $e){
+				continue;
+			}
+		}
+		
+		return $output;
+	}
+	
 	/*
 		Gets all comments of a ticket
 		

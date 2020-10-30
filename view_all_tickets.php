@@ -16,7 +16,6 @@
 	
 	$account = new Account($_SESSION['username']);
 	$all_tickets = get_tickets($_SESSION['username']);
-	
 	//Sort the tickets
 	$ticket_order = ["unassigned", "assigned", "pending", "resolved", "closed"];
 	
@@ -29,20 +28,22 @@
 ?>
 
 <!DOCTYPE html>
-<html lang='en'>
-	<head>
+<head>
 		<meta charset='UTF-8'>
 		<title>Welcome</title>
 		<link rel='stylesheet' href='include/css/main.css'>
 		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>
 	<body>
+		
 		<?php include("include/templates/header.php"); ?>
 		Search: <input type='text' name='ticket_search' id='ticket_search' placeholder='Search for ticket' /> <span id='cancel_search'>X</span>
 		<input type='checkbox' id='search_id' class='search_checkbox' value=0 checked/> ID
 		<input type='checkbox' id='search_title' class='search_checkbox' value=1 /> Title
 		<input type='checkbox' id='search_tags' class='search_checkbox' value=2 /> Tags
 		<input type='checkbox' id='search_status' class='search_checkbox' value=3 /> Status
+ 
+ 
 		<?php
 			//Additional table columns based on account type
 			if(!$account->is_norm()){
@@ -80,7 +81,7 @@
 						</td>
 				<?php
 					}
- 
+					
 					if($account->is_tri() || $account->is_admin()){
 				?>
 						<td style='text-align:center;'>
@@ -90,7 +91,13 @@
 					}
 				?>
 			</tr>
-			<?php			
+			
+			<?php
+					 
+					if($account->is_dev()) { // Dev view starts
+						$all_tickets = get_dev_tickets($_SESSION['username']);
+					}
+		 			
 				//For each ticket
 				foreach($all_tickets as $ticket){
 			?>
@@ -114,7 +121,7 @@
 							}
 						?>
 					</td>
-					<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
+					<td   class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
 						<?php echo $ticket->get_status(); ?>
 					</td>
 					<?php
@@ -129,15 +136,19 @@
 							</td>
 					<?php
 						}
-						// Once assigned, don modify.
-						/*$status = $ticket->get_status();
-						 if(($account->is_tri() || $account->is_admin()) && !(strtoupper($status) == 'ASSIGNED')) */
-						 if($account->is_tri() || $account->is_admin()) {
-		
+						// Only assigned and unassigned status can update developers.
+						$status = $ticket->get_status();
+						$disableSelection = "";
+
+						if($account->is_tri() || $account->is_admin()){
+							if(!(strtolower($status) == 'assigned') && !(strtolower($status) == 'unassigned')) {
+								$disableSelection = "disabled";
+							}
+							 
 					?>
 							<td style='text-align:center;'>
 								<form action='ticket_assign.php' method='POST'>
-									<select name='developer'>
+									<select name='developer' <?php echo $disableSelection ?>>
 										<option value='0'>Assign developer</option>
 										<option value='1'>Clear developer</option>
 										<?php
@@ -150,7 +161,7 @@
 											}
 										?>
 									</select>
-									<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+									<input type='checkbox' <?php echo $disableSelection ?> class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
 									<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
 								</form>
 							</td>
@@ -161,6 +172,7 @@
 			<?php
 				}
 			?>
+		<?php //} ?>
 		</table>
 	</body>
 </html>
