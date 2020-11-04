@@ -56,10 +56,11 @@
 			@mysqli_close($GLOBALS['mysql_link']);
 			exit();
 		}
+		
+		//Update the status and redirect
+		$ticket->update_status('Assigned');
 	}
 	
-	//Update the status and redirect
-	$ticket->update_status('Assigned');
 	header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 	
 	//Close connection
