@@ -28,7 +28,8 @@
 ?>
 
 <!DOCTYPE html>
-<head>
+<html lang='en'>
+	<head>
 		<meta charset='UTF-8'>
 		<title>Welcome</title>
 		<link rel='stylesheet' href='include/css/main.css'>
@@ -42,8 +43,7 @@
 		<input type='checkbox' id='search_title' class='search_checkbox' value=1 /> Title
 		<input type='checkbox' id='search_tags' class='search_checkbox' value=2 /> Tags
 		<input type='checkbox' id='search_status' class='search_checkbox' value=3 /> Status
- 
- 
+		
 		<?php
 			//Additional table columns based on account type
 			if(!$account->is_norm()){
@@ -92,12 +92,7 @@
 				?>
 			</tr>
 			
-			<?php
-					 
-					if($account->is_dev()) { // Dev view starts
-						$all_tickets = get_dev_tickets($_SESSION['username']);
-					}
-		 			
+			<?php		 			
 				//For each ticket
 				foreach($all_tickets as $ticket){
 			?>
@@ -134,17 +129,16 @@
 							<td <?php echo (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
 								<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
 							</td>
-					<?php 
+					<?php
 						}
-						// Only assigned and unassigned status can update developers.
-						$status = $ticket->get_status();
+						// Only assigned and unassigned status can update developers
 						$disableSelection = "";
 
 						if($account->is_tri() || $account->is_admin()){
-							if(!(strtolower($status) == 'assigned') && !(strtolower($status) == 'unassigned')) {
+							if(!(strtolower($ticket->get_status()) == 'assigned') && !(strtolower($ticket->get_status()) == 'unassigned')) {
 								$disableSelection = "disabled";
 							}
-							 
+							
 					?>
 							<td style='text-align:center;'>
 								<form action='ticket_assign.php' method='POST'>
@@ -172,7 +166,6 @@
 			<?php
 				}
 			?>
-		<?php //} ?>
 		</table>
 	</body>
 </html>
