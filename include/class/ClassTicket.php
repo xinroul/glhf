@@ -197,10 +197,11 @@
 			
 			@param	int
 		*/
-		function update_dup($dup_id){
+		function update_dup($dup_id, $ticketid){
+			$ticketid = $this->ticket_id;
 			//Ensure only triagers can update this field
 			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
-				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."' WHERE .`id` = {$this->ticket_id};");
+				db_query("UPDATE `tickets` SET duplicate_of = ". (int)$dup_id ." WHERE id = {$ticketid};");
 			}
 		}
 		

@@ -41,6 +41,15 @@
 		exit();
 	}
 	
+	// Only triager can set bug as dup
+	if ($account->is_tri()) {
+		if($_POST['duplicate_ticks'] == "Set as Duplicate"){
+			$ticket->update_dup($_POST['dup_tick'], $_POST['ticket_id']);
+			header("location: view_all_tickets.php");
+			@mysqli_close($GLOBALS['mysql_link']);
+			exit();
+		}
+	}
 	//If clearing the assigned developer
 	if($_POST['developer'] == "1"){
 		$ticket->clear_dev();
@@ -60,6 +69,9 @@
 			exit();
 		}
 	}
+
+	 
+	
 	
 	header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 	

@@ -125,34 +125,57 @@
 							Duplicate of:
 						</td>
 						<td>
-							<?php echo "<a href='view_ticket_info.php?t={$ticket->get_duplicate_of()}'>{$ticket->get_duplicate_of()}</a>"; ?>
+							
+							<?php
+								$query = db_query("SELECT * FROM `tickets` WHERE id != ".(int)$_GET['t']." and `title` like '%".$ticket->get_title()."%';");
+								$dup_exists = 0;
+								while($row = mysqli_fetch_assoc($query)) {
+									if($row > 0) {
+										$dup_exists = 1;
+										$dup_of = $row['id'];
+
+									}
+							?>
+								<a href='view_ticket_info.php?t=<?php echo $row['id']; ?>'><?php echo "Ticket (".$row['id'] .") - ". $row['title'] ." "; ?></a> ,
+							<?php
+								}
+							?>
+						   
+		 
 						</td>
+								
+							 
 					</tr>
 			<?php
 				}
-				
-				if($account->is_tri() || $account->is_admin()){
-			?>
+					$status = $ticket->get_status();
+					$disableSelection = "";
+
+					if($account->is_tri() || $account->is_admin()){
+						if(!(strtolower($status) == 'assigned') && !(strtolower($status) == 'unassigned')) {
+							$disableSelection = "disabled";
+						}
+							 
+					?>
 					<tr>
 						<td>
 							Assign to:
 						</td>
 						<td>
 							 <form action='ticket_assign.php' method='POST'>
-								<select name='developer'>
+								<select name='developer' <?php echo $disableSelection ?>>
 									<option value='0'>Assign developer</option>
 									<option value='1'>Clear developer</option>
 							<?php
 								$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
-								
-								while($row = mysqli_fetch_assoc($query)){
-							?>
+ 								while($row = mysqli_fetch_assoc($query)){
+ 							?>
 									 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
 							<?php
 								}
 							?>
 								</select>
-								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+								<input type='checkbox' <?php echo $disableSelection ?> class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
 								<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
 							</form>
 						</td>
@@ -203,6 +226,25 @@
 				</table>
 				<br />
 		<?php
+			}
+			// Assuming there's only 1 duplicate.
+			if($account->is_tri() && $dup_exists == 1) {
+			?>
+			<form action='ticket_assign.php' method='POST'>
+			<table id='duplicate_ticks' class='basic_table' style='width:60%;'>
+				<tr>
+					 
+					<td>
+ 						<input type='text' name='dup_tick' value='<?php echo (int)$dup_of; ?>'>
+ 						<input type='text' name='ticket_id' value='<?php echo (int)$_GET['t']; ?>'>
+
+						<input type='submit' name='duplicate_ticks' value='Set as Duplicate'>
+					</td>
+				</tr>
+			</table>
+		</form>
+					 
+			<?php
 			}
 		?>
 		<a href='view_all_tickets.php'>Back to main page</a>
