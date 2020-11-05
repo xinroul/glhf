@@ -125,11 +125,6 @@
 			return $this->reviewed_by;
 		}
 		
-		function get_by_dev_tickets($dev_username) {
-			if($this->viewed_by->is_dev()){				
-				db_query("SELECT * FROM TICKETS WHERE .`assigned_to` = {$this->dev_username};");
-			}
-		}
 		/*
 			Updates the ticket title
 			Available to owner of ticket or elevated users

@@ -1,4 +1,6 @@
 <?php
+	//Current redirects to error are the same; can show different page if required per error type
+	
 	// Initialize the session
 	session_start();
 	
@@ -58,16 +60,14 @@
 	}else{
 		//If assigning a developer
 		if(!$ticket->assign_dev($_POST['developer'])){
- 			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-			@mysqli_close($GLOBALS['mysql_link']);
-			exit();
-		}
-		else {
-			$ticket->update_status('Assigned');
+			//If error in assigning
 			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 			@mysqli_close($GLOBALS['mysql_link']);
 			exit();
 		}
+		
+		//Update the status and redirect
+		$ticket->update_status('Assigned');
 	}
 
 	 
