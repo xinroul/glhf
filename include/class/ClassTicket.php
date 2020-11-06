@@ -195,7 +195,15 @@
 		function update_dup($dup_id){
 			//Ensure only triagers can update this field
 			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
-				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."' WHERE .`id` = {$this->ticket_id};");
+				$dup_ticket = new Ticket($dup_id);
+				
+				//Recursively drill down to the base duplicate
+				while(!empty($dup_ticket->get_duplicate_of())){
+					$dup_id = $dup_ticket->get_duplicate_of();
+					$dup_ticket = new Ticket($dup_id);
+				}
+				
+				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."', `status` = 'closed' WHERE `id` = {$this->ticket_id};");
 			}
 		}
 		
