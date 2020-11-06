@@ -38,7 +38,7 @@
 		<table id='account_details' class='basic_table' style='width:30%;'>
 			<tr>
 				<td colspan='2'>
-					<?php echo $view_account->get_full_name(); ?>'s Profile
+					<?= $view_account->get_full_name() ?>'s Profile
 				</td>
 			</tr>
 			<tr>
@@ -46,7 +46,7 @@
 					First Name:
 				</td>
 				<td>
-					<?php echo ucfirst($view_account->get_first_name()); ?>
+					<?= ucfirst($view_account->get_first_name()) ?>
 				</td>
 			</tr>
 			<tr>
@@ -54,7 +54,7 @@
 					Lats Name:
 				</td>
 				<td>
-					<?php echo ucfirst($view_account->get_last_name()); ?>
+					<?= ucfirst($view_account->get_last_name()) ?>
 				</td>
 			</tr>
 			<tr>
@@ -62,7 +62,7 @@
 					Date of birth:
 				</td>
 				<td>
-					<?php echo date('d-M-Y', strtotime($view_account->get_dob())); ?>
+					<?= date('d-M-Y', strtotime($view_account->get_dob())) ?>
 				</td>
 			</tr>
 			<tr>
@@ -70,7 +70,7 @@
 					Account type:
 				</td>
 				<td>
-					<?php echo ucfirst($view_account->get_account_type()); ?>
+					<?= ucfirst($view_account->get_account_type()) ?>
 				</td>
 			</tr>
 			<?php
@@ -82,7 +82,7 @@
 							Experience:
 						</td>
 						<td>
-							<?php echo $view_account->get_experience(); ?>
+							<?= $view_account->get_experience() ?>
 						</td>
 					</tr>
 			<?php
@@ -116,11 +116,11 @@
 						foreach($past_tickets as $this_ticket){
 				?>
 							<tr>
-								<td onclick="location.href='view_ticket_info.php?t=<?php echo $this_ticket->ticket_id; ?>'" style='width:25%; text-align:center; cursor:pointer;'>
-									<?php echo $this_ticket->ticket_id; ?>
+								<td onclick="location.href='view_ticket_info.php?t=<?= $this_ticket->ticket_id ?>'" style='width:25%; text-align:center; cursor:pointer;'>
+									<?= $this_ticket->ticket_id ?>
 								</td>
-								<td onclick="location.href='view_ticket_info.php?t=<?php echo $this_ticket->ticket_id; ?>'" style='cursor:pointer;'>
-									<?php echo $this_ticket->get_title(); ?>
+								<td onclick="location.href='view_ticket_info.php?t=<?= $this_ticket->ticket_id ?>'" style='cursor:pointer;'>
+									<?= $this_ticket->get_title() ?>
 								</td>
 							</tr>
 				<?php
@@ -163,11 +163,11 @@
 								foreach($active_tickets as $this_ticket){
 						?>
 									<tr>
-										<td onclick="location.href='view_ticket_info.php?t=<?php echo $this_ticket->ticket_id; ?>'" style='width:25%; text-align:center; cursor:pointer;'>
-											<?php echo $this_ticket->ticket_id; ?>
+										<td onclick="location.href='view_ticket_info.php?t=<?= $this_ticket->ticket_id ?>'" style='width:25%; text-align:center; cursor:pointer;'>
+											<?= $this_ticket->ticket_id ?>
 										</td>
-										<td onclick="location.href='view_ticket_info.php?t=<?php echo $this_ticket->ticket_id; ?>'" style='cursor:pointer;'>
-											<?php echo $this_ticket->get_title(); ?>
+										<td onclick="location.href='view_ticket_info.php?t=<?= $this_ticket->ticket_id ?>'" style='cursor:pointer;'>
+											<?= $this_ticket->get_title() ?>
 										</td>
 									</tr>
 						<?php

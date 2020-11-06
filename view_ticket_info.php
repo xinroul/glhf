@@ -38,7 +38,7 @@
 		<table id='ticket_details' class='basic_table' style='width:60%;'>
 			<tr>
 				<td colspan='2'>
-					Viewing ticket #<?php echo (int)$_GET['t']; ?>
+					Viewing ticket #<?= (int)$_GET['t'] ?>
 				</td>
 			</tr>
 			<tr>
@@ -46,7 +46,7 @@
 					Title:
 				</td>
 				<td style='width:70%;'>
-					<?php echo $ticket->get_title(); ?>
+					<?= $ticket->get_title() ?>
 				</td>
 			</tr>
 			<tr>
@@ -54,7 +54,7 @@
 					Description:
 				</td>
 				<td>
-					<?php echo $ticket->get_description(); ?>
+					<?= $ticket->get_description() ?>
 				</td>
 			</tr>
 			<tr>
@@ -69,7 +69,7 @@
 							foreach($tag_array as $tag){
 					?>
 								<span class='ticket_tag' style='cursor:auto;'>
-										<?php echo $tag; ?>
+										<?= $tag ?>
 								</span>	
 					<?php
 							}
@@ -82,8 +82,8 @@
 					Created by:
 				</td>
 				<td>
-					<a href='view_account_info.php?a=<?php echo $ticket->get_created_by()->id; ?>'>
-						<?php echo $ticket->get_created_by()->get_full_name(); ?>
+					<a href='view_account_info.php?a=<?= $ticket->get_created_by()->id ?>'>
+						<?= $ticket->get_created_by()->get_full_name() ?>
 					</a>
 				</td>
 			</tr>
@@ -92,15 +92,15 @@
 					Created on:
 				</td>
 				<td>
-					<?php echo date('d-M-Y', strtotime($ticket->get_created_date())); ?>
+					<?= date('d-M-Y', strtotime($ticket->get_created_date())) ?>
 				</td>
 			</tr>
 			<tr>
 				<td>
 					Current Status:
 				</td>
-				<td class='<?php echo $ticket->get_status(); ?>_ticket'>
-					<?php echo ucfirst($ticket->get_status()); ?>
+				<td class='<?= $ticket->get_status() ?>_ticket'>
+					<?= ucfirst($ticket->get_status()) ?>
 				</td>
 			</tr>
 			<tr>
@@ -121,8 +121,8 @@
 								<br />
 								<br />
 								<form action='ticket_assign.php' method='POST'>
-									Duplicte ID: <input type='text' name='dup_id' value='<?php echo $dup_ticket->ticket_id; ?>' style='width:60px;;'/>
-									<input type='hidden' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+									Duplicte ID: <input type='text' name='dup_id' value='<?= $dup_ticket->ticket_id ?>' style='width:60px;;'/>
+									<input type='hidden' name='ticket_id' value='<?= $ticket->ticket_id ?>' />
 									<input type='submit' name='set_as_duplicate' value='Set as duplicate' />
 								</form>
 					<?php
@@ -134,7 +134,7 @@
 					?>
 								<form action='ticket_assign.php' method='POST'>
 									Duplicte ID: <input type='number' min='1' name='dup_id' style='width:60px;' />
-									<input type='hidden' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+									<input type='hidden' name='ticket_id' value='<?= $ticket->ticket_id ?>' />
 									<input type='submit' name='set_as_duplicate' value='Set as duplicate' />
 								</form>
 					<?php
@@ -154,7 +154,7 @@
 							Assigned to:
 						</td>
 						<td>
-							<?php echo (is_object($ticket->get_assigned_to()) ? "<a href='view_account_info.php?a={$ticket->get_assigned_to()->id}'>{$ticket->get_assigned_to()->get_full_name()}</a>" : ""); ?>
+							<?= (is_object($ticket->get_assigned_to()) ? "<a href='view_account_info.php?a={$ticket->get_assigned_to()->id}'>{$ticket->get_assigned_to()->get_full_name()}</a>" : "") ?>
 						</td>
 					</tr>
 					<tr>
@@ -162,7 +162,7 @@
 							Reviewed by:
 						</td>
 						<td>
-							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
+							<?= (is_object($ticket->get_reviewed_by()) ? "<a href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : "") ?>
 						</td>
 					</tr>
 			<?php
@@ -190,13 +190,13 @@
 								
  								while($row = mysqli_fetch_assoc($query)){
  							?>
-									<option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+									<option value='<?= $row['id'] ?>'><?= $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)" ?></option>
 							<?php
 								}
 							?>
 								</select>
-								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' <?php echo $disableSelection ?>/>
-								<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
+								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?= $ticket->ticket_id ?>' <?php echo $disableSelection ?>/>
+								<input type='submit' id='confirm_<?= $ticket->ticket_id ?>' value='Assign' disabled/>
 							</form>
 						</td>
 					</tr>
@@ -219,7 +219,7 @@
 				</tr>
 				<tr>
 					<td>
-						<input type='hidden' name='bug_id' value='<?php echo (int)$_GET['t']; ?>'>
+						<input type='hidden' name='bug_id' value='<?= (int)$_GET['t'] ?>'>
 						<input type='submit' name='submit' value='Comment on Bug Ticket'>
 					</td>
 				</tr>
@@ -235,12 +235,12 @@
 				<table class='basic_table' style='width:60%;'>
 					<tr>
 						<td>
-							<span style='float:left'>From: <a href='view_account_info.php?a=<?php echo $this_comment['account_id']; ?>'><?php echo $poster->get_full_name(); ?></a></span> <span style='float:right'><?php echo date('d-M-Y', strtotime($this_comment['created_date'])); ?></span>
+							<span style='float:left'>From: <a href='view_account_info.php?a=<?= $this_comment['account_id'] ?>'><?= $poster->get_full_name() ?></a></span> <span style='float:right'><?= date('d-M-Y', strtotime($this_comment['created_date'])) ?></span>
 						</td>
 					</tr>
 					<tr>
 						<td>
-							<?php echo $this_comment['comment']; ?>
+							<?= $this_comment['comment'] ?>
 						</td>
 					</tr>
 				</table>

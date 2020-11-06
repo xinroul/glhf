@@ -97,13 +97,13 @@
 				foreach($all_tickets as $ticket){
 			?>
 				<tr>
-					<td onclick="location.href='view_ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; cursor:pointer;'>
+					<td onclick="location.href='view_ticket_info.php?t=<?= $ticket->ticket_id ?>'" class='<?= $ticket->get_status() ?>_ticket' style='text-align:center; cursor:pointer;'>
 						<?php printf('%05d', $ticket->ticket_id); ?>
 					</td>
-					<td onclick="location.href='view_ticket_info.php?t=<?php echo $ticket->ticket_id; ?>'" class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left; cursor:pointer;'>
-						<?php echo $ticket->get_title(); ?>
+					<td onclick="location.href='view_ticket_info.php?t=<?= $ticket->ticket_id ?>'" class='<?= $ticket->get_status() ?>_ticket' style='text-align:left; cursor:pointer;'>
+						<?= $ticket->get_title() ?>
 					</td>
-					<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left;'>
+					<td class='<?= $ticket->get_status() ?>_ticket' style='text-align:left;'>
 						<?php
 							if(!empty($ticket->get_tags())){
 								$tag_array = explode(",", $ticket->get_tags());
@@ -111,25 +111,25 @@
 								foreach($tag_array as $tag){
 						?>
 									<span class='ticket_tag'>
-											<?php echo $tag; ?>
+											<?= $tag ?>
 									</span>	
 						<?php
 								}
 							}
 						?>
 					</td>
-					<td   class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center;'>
-						<?php echo $ticket->get_status(); ?>
+					<td   class='<?= $ticket->get_status() ?>_ticket' style='text-align:center;'>
+						<?= $ticket->get_status() ?>
 					</td>
 					<?php
 						//Additional table columns based on account type
 						if(!$account->is_norm()){
 					?>
-							<td <?php echo (is_object($ticket->get_assigned_to()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_assigned_to()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
-								<?php echo (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->get_full_name() : ""); ?>
+							<td <?= (is_object($ticket->get_assigned_to()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_assigned_to()->id}'\"" : "") ?> class='<?= $ticket->get_status() ?>_ticket' style='text-align:center; <?= (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : "") ?>'>
+								<?= (is_object($ticket->get_assigned_to()) ? $ticket->get_assigned_to()->get_full_name() : "") ?>
 							</td>
-							<td <?php echo (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : ""); ?> class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:center; <?php echo (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : ""); ?>'>
-								<?php echo (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : ""); ?>
+							<td <?= (is_object($ticket->get_reviewed_by()) ? "onclick=\"location.href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'\"" : "") ?> class='<?= $ticket->get_status() ?>_ticket' style='text-align:center; <?= (is_object($ticket->get_assigned_to()) ? "cursor:pointer;" : "") ?>'>
+								<?= (is_object($ticket->get_reviewed_by()) ? $ticket->get_reviewed_by()->get_full_name() : "") ?>
 							</td>
 					<?php
 						}
@@ -152,13 +152,13 @@
 											
 											while($row = mysqli_fetch_assoc($query)){
 										?>
-												<option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+												<option value='<?= $row['id'] ?>'><?= $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)" ?></option>
 										<?php
 											}
 										?>
 									</select>
-									<input type='checkbox' <?php echo $disableSelection ?> class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
-									<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
+									<input type='checkbox' <?= $disableSelection ?> class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id ?>' />
+									<input type='submit' id='confirm_<?= $ticket->ticket_id ?>' value='Assign' disabled/>
 								</form>
 							</td>
 					<?php
