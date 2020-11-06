@@ -101,6 +101,45 @@
 					<?php echo ucfirst($ticket->get_status()); ?>
 				</td>
 			</tr>
+			<tr>
+				<td>
+					Duplicate of:
+				</td>
+				<td>
+					<?php
+						try{
+							//There is a duplicate
+							$dup_ticket = new Ticket($ticket->get_duplicate_of());
+						
+							echo "<a href='view_ticket_info.php?t={$dup_ticket->ticket_id}'>#{$dup_ticket->ticket_id} - {$dup_ticket->get_title()}</a>";
+							
+							//Allow traigers to update the field
+							if($account->is_tri() || $account->is_admin()){
+					?>
+								<form action='ticket_assign.php' method='POST'>
+									<input type='text' name='dup_id' value='<?php echo $dup_ticket->ticket_id; ?>'>
+									<input type='submit' name='set_as_duplicate' value='1'>
+								</form>
+					<?php
+							}
+						}catch(Exception $e){
+							//There is no duplicate
+							if($account->is_tri() || $account->is_admin()){
+								//Allow triagers to set duplicate
+					?>
+								<form action='ticket_assign.php' method='POST'>
+									<input type='text' name='dup_id'>
+									<input type='submit' name='set_as_duplicate' value='1'>
+								</form>
+					<?php
+							}else{
+								//Show N/A for other users
+								echo "N/A";
+							}
+						}
+					?>
+				</td>
+			</tr>
 			<?php
 				if(!$account->is_norm()){
 			?>
@@ -120,18 +159,16 @@
 							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							Duplicate of:
-						</td>
-						<td>
-							<?php echo "<a href='view_ticket_info.php?t={$ticket->get_duplicate_of()}'>{$ticket->get_duplicate_of()}</a>"; ?>
-						</td>
-					</tr>
 			<?php
 				}
-				
+
 				if($account->is_tri() || $account->is_admin()){
+					//Check if the ticket is resolved/closed/invalid
+					if(strtolower($ticket->get_status()) != 'assigned' && strtolower($ticket->get_status()) != 'unassigned'){
+						$disableSelection = "disabled";
+					}else{
+						$disableSelection = "";
+					}
 			?>
 					<tr>
 						<td>
@@ -139,20 +176,19 @@
 						</td>
 						<td>
 							 <form action='ticket_assign.php' method='POST'>
-								<select name='developer'>
+								<select name='developer' <?php echo $disableSelection ?>>
 									<option value='0'>Assign developer</option>
 									<option value='1'>Clear developer</option>
 							<?php
 								$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
-								
-								while($row = mysqli_fetch_assoc($query)){
-							?>
+ 								while($row = mysqli_fetch_assoc($query)){
+ 							?>
 									 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
 							<?php
 								}
 							?>
 								</select>
-								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' <?php echo $disableSelection ?>/>
 								<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
 							</form>
 						</td>

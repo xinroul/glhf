@@ -1,4 +1,6 @@
 <?php
+	//Current redirects to error are the same; can show different page if required per error type
+	
 	// Initialize the session
 	session_start();
 	
@@ -41,16 +43,33 @@
 		exit();
 	}
 	
-	//If clearing the assigned developer
-	if($_POST['developer'] == "1"){
-		$ticket->clear_dev();
-	}else{
-		//If assigning a developer
-		if(!$ticket->assign_dev($_POST['developer'])){
+	//Only triager can set bug as duplicate
+	if($account->is_tri() || $account->is_admin()){
+		if($_POST['set_as_duplicate'] == "1"){
+			$ticket->update_dup((int)$_POST['dup_id']);
+			
 			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
 			@mysqli_close($GLOBALS['mysql_link']);
 			exit();
 		}
+	}
+	
+	//If clearing the assigned developer
+	if($_POST['developer'] == "1"){
+		$ticket->clear_dev();
+		$ticket->update_status('Unassigned');
+
+	}else{
+		//If assigning a developer
+		if(!$ticket->assign_dev($_POST['developer'])){
+			//If error in assigning
+			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
+			@mysqli_close($GLOBALS['mysql_link']);
+			exit();
+		}
+		
+		//Update the status and redirect
+		$ticket->update_status('Assigned');
 	}
 	
 	header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
