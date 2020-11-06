@@ -92,7 +92,7 @@
 				?>
 			</tr>
 			
-			<?php		 			
+			<?php
 				//For each ticket
 				foreach($all_tickets as $ticket){
 			?>
@@ -105,14 +105,16 @@
 					</td>
 					<td class='<?php echo $ticket->get_status(); ?>_ticket' style='text-align:left;'>
 						<?php
-							$tag_array = explode(",", $ticket->get_tags());
-							
-							foreach($tag_array as $tag){
+							if(!empty($ticket->get_tags())){
+								$tag_array = explode(",", $ticket->get_tags());
+								
+								foreach($tag_array as $tag){
 						?>
-								<span class='ticket_tag'>
-										<?php echo $tag; ?>
-								</span>	
+									<span class='ticket_tag'>
+											<?php echo $tag; ?>
+									</span>	
 						<?php
+								}
 							}
 						?>
 					</td>

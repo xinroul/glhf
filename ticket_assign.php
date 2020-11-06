@@ -27,13 +27,6 @@
 		exit();
 	}
 	
-	//If no developer was chosen
-	if($_POST['developer'] == "0"){
-		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-		@mysqli_close($GLOBALS['mysql_link']);
-		exit();
-	}
-	
 	//Ensure the user has permissions to update the field
 	$account = new Account($_SESSION['username']);
 	
@@ -43,15 +36,20 @@
 		exit();
 	}
 	
-	//Only triager can set bug as duplicate
-	if($account->is_tri() || $account->is_admin()){
-		if($_POST['set_as_duplicate'] == "1"){
-			$ticket->update_dup((int)$_POST['dup_id']);
-			
-			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-			@mysqli_close($GLOBALS['mysql_link']);
-			exit();
-		}
+	//If setting bug as duplicate
+	if(isset($_POST['set_as_duplicate'])){
+		$ticket->update_dup((int)$_POST['dup_id']);
+		
+		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
+		@mysqli_close($GLOBALS['mysql_link']);
+		exit();
+	}
+	
+	//If no developer was chosen
+	if(empty($_POST['developer'])){
+		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
+		@mysqli_close($GLOBALS['mysql_link']);
+		exit();
 	}
 	
 	//If clearing the assigned developer

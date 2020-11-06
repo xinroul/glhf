@@ -42,10 +42,10 @@
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td style='width:30%;'>
 					Title:
 				</td>
-				<td>
+				<td style='width:70%;'>
 					<?php echo $ticket->get_title(); ?>
 				</td>
 			</tr>
@@ -63,14 +63,16 @@
 				</td>
 				<td>
 					<?php
-						$tag_array = explode(",", $ticket->get_tags());
-						
-						foreach($tag_array as $tag){
+						if(!empty($ticket->get_tags())){
+							$tag_array = explode(",", $ticket->get_tags());
+							
+							foreach($tag_array as $tag){
 					?>
-							<span class='ticket_tag' style='cursor:auto;'>
-									<?php echo $tag; ?>
-							</span>	
+								<span class='ticket_tag' style='cursor:auto;'>
+										<?php echo $tag; ?>
+								</span>	
 					<?php
+							}
 						}
 					?>
 				</td>
@@ -116,9 +118,12 @@
 							//Allow traigers to update the field
 							if($account->is_tri() || $account->is_admin()){
 					?>
+								<br />
+								<br />
 								<form action='ticket_assign.php' method='POST'>
-									<input type='text' name='dup_id' value='<?php echo $dup_ticket->ticket_id; ?>'>
-									<input type='submit' name='set_as_duplicate' value='1'>
+									Duplicte ID: <input type='text' name='dup_id' value='<?php echo $dup_ticket->ticket_id; ?>' style='width:60px;;'/>
+									<input type='hidden' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+									<input type='submit' name='set_as_duplicate' value='Set as duplicate' />
 								</form>
 					<?php
 							}
@@ -128,8 +133,9 @@
 								//Allow triagers to set duplicate
 					?>
 								<form action='ticket_assign.php' method='POST'>
-									<input type='text' name='dup_id'>
-									<input type='submit' name='set_as_duplicate' value='1'>
+									Duplicte ID: <input type='number' min='1' name='dup_id' style='width:60px;' />
+									<input type='hidden' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+									<input type='submit' name='set_as_duplicate' value='Set as duplicate' />
 								</form>
 					<?php
 							}else{
@@ -175,15 +181,16 @@
 							Assign to:
 						</td>
 						<td>
-							 <form action='ticket_assign.php' method='POST'>
+							<form action='ticket_assign.php' method='POST'>
 								<select name='developer' <?php echo $disableSelection ?>>
 									<option value='0'>Assign developer</option>
 									<option value='1'>Clear developer</option>
 							<?php
 								$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
+								
  								while($row = mysqli_fetch_assoc($query)){
  							?>
-									 <option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
+									<option value='<?php echo $row['id']; ?>'><?php echo $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)"; ?></option>
 							<?php
 								}
 							?>
