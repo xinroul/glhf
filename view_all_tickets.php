@@ -158,7 +158,7 @@
 										?>
 									</select>
 									<input type='checkbox' <?= $disableSelection ?> class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id ?>' />
-									<input type='submit' id='confirm_<?= $ticket->ticket_id ?>' value='Assign' disabled/>
+									<input type='submit' name='assign_dev' id='confirm_<?= $ticket->ticket_id ?>' value='Assign' disabled/>
 								</form>
 							</td>
 					<?php

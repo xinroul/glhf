@@ -100,7 +100,19 @@
 					Current Status:
 				</td>
 				<td class='<?= $ticket->get_status() ?>_ticket'>
-					<?= ucfirst($ticket->get_status()) ?>
+					<?php
+						echo ucfirst($ticket->get_status());
+						
+						if(strtolower($ticket->get_status()) == "assigned" && ($account->is_dev() || $account->is_admin())){
+					?>
+							<form action='ticket_assign.php' method='POST' style='display:inline-block;'>
+								<input type='hidden' name='account_id' value='<?= $account->id ?>' />
+								<input type='hidden' name='ticket_id' value='<?= $ticket->ticket_id ?>' />
+								<input type='submit' name='request_ticket_review' value='Set for Review' />
+							</form>
+					<?php
+						}
+					?>
 				</td>
 			</tr>
 			<tr>
@@ -163,7 +175,33 @@
 							Reviewed by:
 						</td>
 						<td>
-							<?= (is_object($ticket->get_reviewed_by()) ? "<a href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : "") ?>
+							<?php 
+								if(is_object($ticket->get_reviewed_by())){
+							?>
+									<a href='view_account_info.php?a=<?= $ticket->get_reviewed_by()->id ?>'><?= $ticket->get_reviewed_by()->get_full_name() ?></a>
+							<?php
+									if(strtolower($ticket->get_status()) == "pending" && ($account->is_rev() || $account->is_admin())){
+							?>
+										<form action='ticket_assign.php' method='POST' style='display:inline-block;'>
+											<input type='hidden' name='account_id' value='<?= $account->id ?>' />
+											<input type='hidden' name='ticket_id' value='<?= $ticket->ticket_id ?>' />
+											<input type='submit' name='approve_ticket' value='Approve' />
+											<input type='submit' name='reject_ticket' value='Reject' />
+										</form>
+							<?php
+									}
+								}else{
+									if(strtolower($ticket->get_status()) == "pending" && ($account->is_rev() || $account->is_admin())){
+							?>
+										<form action='ticket_assign.php' method='POST'>
+											<input type='hidden' name='account_id' value='<?= $account->id ?>' />
+											<input type='hidden' name='ticket_id' value='<?= $ticket->ticket_id ?>' />
+											<input type='submit' name='review_ticket' value='Review Ticket' />
+										</form>
+							<?php
+									}
+								}
+							?>
 						</td>
 					</tr>
 			<?php
@@ -197,7 +235,7 @@
 							?>
 								</select>
 								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?= $ticket->ticket_id ?>' <?php echo $disableSelection ?>/>
-								<input type='submit' id='confirm_<?= $ticket->ticket_id ?>' value='Assign' disabled/>
+								<input type='submit' name='assign_dev' id='confirm_<?= $ticket->ticket_id ?>' value='Assign' disabled/>
 							</form>
 						</td>
 					</tr>

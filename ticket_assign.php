@@ -27,56 +27,63 @@
 		exit();
 	}
 	
-	//Ensure the user has permissions to update the field
+	//Ensure the user has permissions to update the fields
 	$account = new Account($_SESSION['username']);
 	
-	if(!$account->is_tri() && !$account->is_admin()){
-		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-		@mysqli_close($GLOBALS['mysql_link']);
-		exit();
+	//Developers
+	if($account->is_dev() || $account->is_admin()){
+		//
+		if(isset($_POST['request_ticket_review'])){
+			$ticket->update_status('pending');
+		}
 	}
 	
-	//If setting bug as duplicate
-	if(isset($_POST['set_as_duplicate'])){
-		$ticket->update_dup((int)$_POST['dup_id']);
-		
-		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-		@mysqli_close($GLOBALS['mysql_link']);
-		exit();
-	}
-	
-	//If clearing bug as duplicate
-	if(isset($_POST['clear_duplicate'])){
-		$ticket->clear_dup();
-		
-		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-		@mysqli_close($GLOBALS['mysql_link']);
-		exit();
-	}
-	
-	//If no developer was chosen
-	if(empty($_POST['developer'])){
-		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-		@mysqli_close($GLOBALS['mysql_link']);
-		exit();
-	}
-	
-	//If clearing the assigned developer
-	if($_POST['developer'] == "1"){
-		$ticket->clear_dev();
-		$ticket->update_status('Unassigned');
-
-	}else{
-		//If assigning a developer
-		if(!$ticket->assign_dev($_POST['developer'])){
-			//If error in assigning
-			header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
-			@mysqli_close($GLOBALS['mysql_link']);
-			exit();
+	//Reviewers
+	if($account->is_rev() || $account->is_admin()){
+		//Reviewer takes on a bug ticket and assigns it to self
+		if(isset($_POST['review_ticket'])){
+			$ticket->assign_rev($_POST['account_id']);
 		}
 		
-		//Update the status and redirect
-		$ticket->update_status('Assigned');
+		//Ticket is approved as resolved
+		if(isset($_POST['approve_ticket'])){
+			$ticket->update_status('resolved');
+		}
+		
+		//Ticket is rejected as resolved
+		if(isset($_POST['reject_ticket'])){
+			$ticket->update_status('assigned');
+			$ticket->clear_rev();
+		}
+	}
+	
+	//Triagers
+	if($account->is_tri() || $account->is_admin()){	
+		//If setting bug as duplicate
+		if(isset($_POST['set_as_duplicate'])){
+			$ticket->update_dup((int)$_POST['dup_id']);
+		}
+		
+		//If clearing bug as duplicate
+		if(isset($_POST['clear_duplicate'])){
+			$ticket->clear_dup();
+		}
+		
+		//If assigning developer, but no developer was chosen
+		if(isset($_POST['assign_dev']) && !empty($_POST['developer'])){
+			//If clearing the assigned developer
+			if($_POST['developer'] == "1"){
+				$ticket->clear_dev();
+				$ticket->update_status('unassigned');
+
+			}else{
+				//Asssign developer
+				$ticket->assign_dev($_POST['developer']);			
+				
+				//Update the status and redirect
+				$ticket->update_status('assigned');
+			}
+		}
 	}
 	
 	header("location: view_ticket_info.php?t={$_POST['ticket_id']}");

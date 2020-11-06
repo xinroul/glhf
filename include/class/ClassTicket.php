@@ -277,12 +277,12 @@
 			@param	string
 			@return	bool
 		*/
-		function assigned_rev($rev_id){
+		function assign_rev($rev_id){
 			if($this->viewed_by->is_rev() || $this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
 				//Ensure reviewer exists
 				$reviewer = new Account(str_clean($rev_id));
 				
-				if(!$reviewer->is_rev()){
+				if(!$reviewer->is_rev() && !$reviewer->is_admin()){
 					return false;
 				}
 				
