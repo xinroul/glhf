@@ -101,6 +101,45 @@
 					<?php echo ucfirst($ticket->get_status()); ?>
 				</td>
 			</tr>
+			<tr>
+				<td>
+					Duplicate of:
+				</td>
+				<td>
+					<?php
+						try{
+							//There is a duplicate
+							$dup_ticket = new Ticket($ticket->get_duplicate_of());
+						
+							echo "<a href='view_ticket_info.php?t={$dup_ticket->ticket_id}'>#{$dup_ticket->ticket_id} - {$dup_ticket->get_title()}</a>";
+							
+							//Allow traigers to update the field
+							if($account->is_tri() || $account->is_admin()){
+					?>
+								<form action='ticket_assign.php' method='POST'>
+									<input type='text' name='dup_id' value='<?php echo $dup_ticket->ticket_id; ?>'>
+									<input type='submit' name='set_as_duplicate' value='1'>
+								</form>
+					<?php
+							}
+						}catch(Exception $e){
+							//There is no duplicate
+							if($account->is_tri() || $account->is_admin()){
+								//Allow triagers to set duplicate
+					?>
+								<form action='ticket_assign.php' method='POST'>
+									<input type='text' name='dup_id'>
+									<input type='submit' name='set_as_duplicate' value='1'>
+								</form>
+					<?php
+							}else{
+								//Show N/A for other users
+								echo "N/A";
+							}
+						}
+					?>
+				</td>
+			</tr>
 			<?php
 				if(!$account->is_norm()){
 			?>
@@ -120,43 +159,17 @@
 							<?php echo (is_object($ticket->get_reviewed_by()) ? "<a href='view_account_info.php?a={$ticket->get_reviewed_by()->id}'>{$ticket->get_reviewed_by()->get_full_name()}</a>" : ""); ?>
 						</td>
 					</tr>
-					<tr>
-						<td>
-							Duplicate of:
-						</td>
-						<td>
-							
-							<?php
-								$query = db_query("SELECT * FROM `tickets` WHERE id != ".(int)$_GET['t']." and `title` like '%".$ticket->get_title()."%';");
-								$dup_exists = 0;
-								while($row = mysqli_fetch_assoc($query)) {
-									if($row > 0) {
-										$dup_exists = 1;
-										$dup_of = $row['id'];
-
-									}
-							?>
-								<a href='view_ticket_info.php?t=<?php echo $row['id']; ?>'><?php echo "Ticket (".$row['id'] .") - ". $row['title'] ." "; ?></a> ,
-							<?php
-								}
-							?>
-						   
-		 
-						</td>
-								
-							 
-					</tr>
 			<?php
 				}
-					$status = $ticket->get_status();
-					$disableSelection = "";
 
-					if($account->is_tri() || $account->is_admin()){
-						if(!(strtolower($status) == 'assigned') && !(strtolower($status) == 'unassigned')) {
-							$disableSelection = "disabled";
-						}
-							 
-					?>
+				if($account->is_tri() || $account->is_admin()){
+					//Check if the ticket is resolved/closed/invalid
+					if(strtolower($ticket->get_status()) != 'assigned' && strtolower($ticket->get_status()) != 'unassigned'){
+						$disableSelection = "disabled";
+					}else{
+						$disableSelection = "";
+					}
+			?>
 					<tr>
 						<td>
 							Assign to:
@@ -175,7 +188,7 @@
 								}
 							?>
 								</select>
-								<input type='checkbox' <?php echo $disableSelection ?> class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' />
+								<input type='checkbox' class='confirm_checkbox' name='ticket_id' value='<?php echo $ticket->ticket_id; ?>' <?php echo $disableSelection ?>/>
 								<input type='submit' id='confirm_<?php echo $ticket->ticket_id; ?>' value='Assign' disabled/>
 							</form>
 						</td>
@@ -226,25 +239,6 @@
 				</table>
 				<br />
 		<?php
-			}
-			// Assuming there's only 1 duplicate.
-			if($account->is_tri() && $dup_exists == 1) {
-			?>
-			<form action='ticket_assign.php' method='POST'>
-			<table id='duplicate_ticks' class='basic_table' style='width:60%;'>
-				<tr>
-					 
-					<td>
- 						<input type='text' name='dup_tick' value='<?php echo (int)$dup_of; ?>'>
- 						<input type='text' name='ticket_id' value='<?php echo (int)$_GET['t']; ?>'>
-
-						<input type='submit' name='duplicate_ticks' value='Set as Duplicate'>
-					</td>
-				</tr>
-			</table>
-		</form>
-					 
-			<?php
 			}
 		?>
 		<a href='view_all_tickets.php'>Back to main page</a>
