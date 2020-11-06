@@ -37,7 +37,7 @@
 				$this->ticket_id = $result['id'];
 				$this->title = $result['title'];
 				$this->description = $result['description'];
-				$this->created_by =  new Account($result['created_by']);
+				$this->created_by = new Account($result['created_by']);
 				$this->created_date = $result['created_date'];
 				$this->tags = $result['tags'];
 				$this->status = $result['status'];
@@ -187,13 +187,14 @@
 		}
 		
 		/*
-			Updates the ticket duplicate id
+			Updates the ticket duplicate ID
 			Available only to triagers
 			
 			@param	int
 			@return	bool
 		*/
 		function update_dup($dup_id){
+			//Cannot set as duplicate of self; resolves infinite loops
 			if($dup_id == $this->ticket_id){
 				return false;
 			}
@@ -209,6 +210,21 @@
 				}
 				
 				db_query("UPDATE `tickets` SET `duplicate_of` = '". (int)$dup_id ."', `status` = 'closed' WHERE `id` = {$this->ticket_id};");
+			}
+			
+			return true;
+		}
+		
+		/*
+			Clears the ticket duplicate ID
+			Available only to triagers
+			
+			@param	int
+		*/
+		function clear_dup(){			
+			//Ensure only triagers can update this field
+			if($this->viewed_by->is_tri() || $this->viewed_by->is_admin()){
+				db_query("UPDATE `tickets` SET `duplicate_of` = NULL, `status` = 'unassigned' WHERE `id` = {$this->ticket_id};");
 			}
 			
 			return true;

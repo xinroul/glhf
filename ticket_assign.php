@@ -45,6 +45,15 @@
 		exit();
 	}
 	
+	//If clearing bug as duplicate
+	if(isset($_POST['clear_duplicate'])){
+		$ticket->clear_dup();
+		
+		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");
+		@mysqli_close($GLOBALS['mysql_link']);
+		exit();
+	}
+	
 	//If no developer was chosen
 	if(empty($_POST['developer'])){
 		header("location: view_ticket_info.php?t={$_POST['ticket_id']}");

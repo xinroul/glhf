@@ -124,6 +124,7 @@
 									Duplicte ID: <input type='text' name='dup_id' value='<?= $dup_ticket->ticket_id ?>' style='width:60px;;'/>
 									<input type='hidden' name='ticket_id' value='<?= $ticket->ticket_id ?>' />
 									<input type='submit' name='set_as_duplicate' value='Set as duplicate' />
+									<input type='submit' name='clear_duplicate' value='Clear duplicate' />
 								</form>
 					<?php
 							}
