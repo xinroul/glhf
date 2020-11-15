@@ -71,11 +71,13 @@
 		
 		//If assigning developer, but no developer was chosen
 		if(isset($_POST['assign_dev']) && !empty($_POST['developer'])){
-			//If clearing the assigned developer
-			if($_POST['developer'] == "1"){
+			if($_POST['developer'] == "1"){ //If clearing the assigned developer
 				$ticket->clear_dev();
 				$ticket->update_status('unassigned');
 
+			}elseif($_POST['developer'] == "2"){ //If setting as invalid
+				$ticket->clear_dev();
+				$ticket->update_status('invalid');
 			}else{
 				//Asssign developer
 				$ticket->assign_dev($_POST['developer']);			

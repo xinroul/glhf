@@ -43,9 +43,13 @@
 }
 
 .resolved_ticket {
-	background-color: #B3dAB1;
+	background-color: #B3DAB1;
 }
 
 .closed_ticket {
 	background-color: #E8E8E8;
+}
+
+.invalid_ticket {
+	background-color: #CEA17d;
 }

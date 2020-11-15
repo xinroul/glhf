@@ -17,7 +17,7 @@
 	$account = new Account($_SESSION['username']);
 	$all_tickets = get_tickets($_SESSION['username']);
 	//Sort the tickets
-	$ticket_order = ["unassigned", "assigned", "pending", "resolved", "closed"];
+	$ticket_order = ["unassigned", "assigned", "pending", "resolved", "closed", "invalid"];
 	
 	usort($all_tickets, function($a, $b) use ($ticket_order){
 		$pos_a = array_search($a->get_status(), $ticket_order);
@@ -147,6 +147,7 @@
 									<select name='developer' <?php echo $disableSelection ?>>
 										<option value='0'>Assign developer</option>
 										<option value='1'>Clear developer</option>
+										<option value='2'>Set as invalid</option>
 										<?php
 											$query = db_query("SELECT * FROM `accounts` WHERE `account_type` = 'developer' ORDER BY `experience`;");
 											
