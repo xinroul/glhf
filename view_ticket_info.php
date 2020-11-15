@@ -29,7 +29,7 @@
 <html lang='en'>
 	<head>
 		<meta charset='UTF-8'>
-		<title>Welcome</title>
+		<title>View Ticket #<?= (int)$_GET['t'] ?></title>
 		<link rel='stylesheet' href='include/css/main.css'>
 		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>
@@ -229,7 +229,7 @@
 								
  								while($row = mysqli_fetch_assoc($query)){
  							?>
-									<option value='<?= $row['id'] ?>'><?= $row['first_name'] ." ". $row['last_name'] ." (". $row['experience'] ." Exp)" ?></option>
+									<option value='<?= $row['id'] ?>'><?= "{$row['first_name']} {$row['last_name']} ({$row['experience']} Exp)" ?></option>
 							<?php
 								}
 							?>

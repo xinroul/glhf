@@ -31,7 +31,7 @@
 <html lang='en'>
 	<head>
 		<meta charset='UTF-8'>
-		<title>Welcome</title>
+		<title>View All Tickets</title>
 		<link rel='stylesheet' href='include/css/main.css'>
 		<link rel='shortcut icon' href='#' /> <!-- Resolving favicon.ico error -->
 	</head>

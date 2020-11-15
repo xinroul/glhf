@@ -6,11 +6,22 @@
 <div style='float:left;'>
 	Welcome 
 	<a href='#'>
-		<?= $account->get_full_name() ?>
+		<a href='view_account_info.php?a=<?= $account->id ?>'>
+			<?= $account->get_full_name() ?>
+		</a>
 	</a>!
 	<a href='report_bug.php'>
 		[ Report a new bug ]
 	</a>
+	<?php
+		if($account->is_tri() || $account->is_admin()){
+	?>
+			<a href='view_reports.php'>
+				[ Generate reports ]
+			</a>
+	<?php
+		}
+	?>
 </div>
 <div style='float:right;'>
 	<a href='logout.php'>
