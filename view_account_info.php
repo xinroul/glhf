@@ -51,7 +51,7 @@
 			</tr>
 			<tr>
 				<td style='width:25%;'>
-					Lats Name:
+					Last Name:
 				</td>
 				<td>
 					<?= ucfirst($view_account->get_last_name()) ?>
