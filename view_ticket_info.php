@@ -180,7 +180,7 @@
 							?>
 									<a href='view_account_info.php?a=<?= $ticket->get_reviewed_by()->id ?>'><?= $ticket->get_reviewed_by()->get_full_name() ?></a>
 							<?php
-									if(strtolower($ticket->get_status()) == "pending" && ($account->is_rev() || $account->is_admin())){
+									if(strtolower($ticket->get_status()) == "pending" && ($account->is_rev() || $account->is_admin()) && $account->id == $ticket->get_reviewed_by()){
 							?>
 										<form action='ticket_assign.php' method='POST' style='display:inline-block;'>
 											<input type='hidden' name='account_id' value='<?= $account->id ?>' />

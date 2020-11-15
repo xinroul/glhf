@@ -46,12 +46,12 @@
 		}
 		
 		//Ticket is approved as resolved
-		if(isset($_POST['approve_ticket'])){
+		if(isset($_POST['approve_ticket']) && $account->id == $ticket->get_reviewed_by()){
 			$ticket->update_status('resolved');
 		}
 		
 		//Ticket is rejected as resolved
-		if(isset($_POST['reject_ticket'])){
+		if(isset($_POST['reject_ticket']) && $account->id == $ticket->get_reviewed_by()){
 			$ticket->update_status('assigned');
 			$ticket->clear_rev();
 		}
