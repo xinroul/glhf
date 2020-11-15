@@ -48,7 +48,7 @@
 			//Additional table columns based on account type
 			if(!$account->is_norm()){
 		?>
-				<input type='checkbox' id='search_assigned' class='search_checkbox' value=4 /> Assigned
+				<input type='checkbox' id='search_developer' class='search_checkbox' value=4 /> Developer
 				<input type='checkbox' id='search_reviewer' class='search_checkbox' value=5 /> Reviewer
 		<?php
 			}
