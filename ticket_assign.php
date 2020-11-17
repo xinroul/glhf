@@ -31,8 +31,8 @@
 	$account = new Account($_SESSION['username']);
 	
 	//Developers
-	if($account->is_dev() || $account->is_admin()){
-		//
+	if($account->is_dev() || $account->is_admin() && $account->id == $ticket->get_assigned_to()){
+		//Set to pending for review
 		if(isset($_POST['request_ticket_review'])){
 			$ticket->update_status('pending');
 		}
