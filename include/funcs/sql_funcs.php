@@ -45,7 +45,7 @@
 	*/
 	function get_tickets($as_user){
 		$as_user = str_clean($as_user);
-		$query = db_query("SELECT `id` FROM `tickets`;");
+		$query = db_query("SELECT `id` FROM `tickets` ORDER BY FIELD (`status`, 'unassigned', 'assigned', 'pending', 'resolved', 'closed', 'invalid'), `id` ASC;");
 		$output = [];
 		
 		while($row = mysqli_fetch_assoc($query)){

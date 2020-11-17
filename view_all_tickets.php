@@ -16,15 +16,6 @@
 	
 	$account = new Account($_SESSION['username']);
 	$all_tickets = get_tickets($_SESSION['username']);
-	//Sort the tickets
-	$ticket_order = ["unassigned", "assigned", "pending", "resolved", "closed", "invalid"];
-	
-	usort($all_tickets, function($a, $b) use ($ticket_order){
-		$pos_a = array_search($a->get_status(), $ticket_order);
-		$pos_b = array_search($b->get_status(), $ticket_order);
-		
-		return $pos_a - $pos_b;
-	});
 ?>
 
 <!DOCTYPE html>
