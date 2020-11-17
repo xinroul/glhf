@@ -103,7 +103,7 @@
 					<?php
 						echo ucfirst($ticket->get_status());
 						
-						if(strtolower($ticket->get_status()) == "assigned" && ($account->is_dev() || $account->is_admin()) && && $account->id == $ticket->get_assigned_to()){
+						if(strtolower($ticket->get_status()) == "assigned" && ($account->is_dev() || $account->is_admin()) && $account->id == $ticket->get_assigned_to()){
 					?>
 							<form action='ticket_assign.php' method='POST' style='display:inline-block;'>
 								<input type='hidden' name='account_id' value='<?= $account->id ?>' />
