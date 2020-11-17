@@ -25,8 +25,12 @@ function generate_report(staff_id, start_date = null, end_date = null){
 		},
 		success: function(data){
 			data = JSON.parse(data);
-			
+			console.log(data);
 			//Update if the field does not exist
+			if(!("unassigned" in data)){
+				data['unassigned'] = 0;
+			}
+			
 			if(!("assigned" in data)){
 				data['assigned'] = 0;
 			}
@@ -39,11 +43,23 @@ function generate_report(staff_id, start_date = null, end_date = null){
 				data['resolved'] = 0;
 			}
 			
+			if(!("closed" in data)){
+				data['closed'] = 0;
+			}
+			
+			if(!("invalid" in data)){
+				data['invalid'] = 0;
+			}
+			
 			//Update the report area
 			$("#staff_report").html(
 				"<table class='basic_table' style='border-collapse:collapse;'>" +
 					"<tr>" +
 						"<td colspan='2'>" + ((staff_id == 0) ? "Total" : staff_map[staff_id]) + "</td>" +
+					"</tr>" +
+					"<tr>" +
+						"<td style='text-align:left;'>Total unassigned</td>" +
+						"<td style='text-align:center;'>" + data['unassigned'] + "</td>" +
 					"</tr>" +
 					"<tr>" +
 						"<td style='text-align:left;'>Total active</td>" +
@@ -56,6 +72,14 @@ function generate_report(staff_id, start_date = null, end_date = null){
 					"<tr>" +
 						"<td style='text-align:left;'>Total resolved</td>" +
 						"<td style='text-align:center;'>" + data['resolved'] + "</td>" +
+					"</tr>" +
+					"<tr>" +
+						"<td style='text-align:left;'>Total duplicates</td>" +
+						"<td style='text-align:center;'>" + data['closed'] + "</td>" +
+					"</tr>" +
+					"<tr>" +
+						"<td style='text-align:left;'>Total invalid</td>" +
+						"<td style='text-align:center;'>" + data['invalid'] + "</td>" +
 					"</tr>" +
 					"<tr>" +
 						"<td style='text-align:left;'>Total tickets</td>" +
