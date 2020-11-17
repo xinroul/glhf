@@ -25,7 +25,7 @@ function generate_report(staff_id, start_date = null, end_date = null){
 		},
 		success: function(data){
 			data = JSON.parse(data);
-			console.log(data);
+			
 			//Update if the field does not exist
 			if(!("unassigned" in data)){
 				data['unassigned'] = 0;
