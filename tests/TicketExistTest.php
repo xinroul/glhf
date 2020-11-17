@@ -36,17 +36,15 @@
 			$result = mysqli_fetch_assoc($query);
 			
 			$this->assertEquals($result['id'], 1);
-			$this->assertEqualsIgnoringCase($result['title'], "Cannot update shipping address");
-			$this->assertEqualsIgnoringCase($result['description'], "Users cannot update their shipping address from their profile page. No errors were returned on submit.");
-			$this->assertEquals(new Account($result['created_by']), new Account("emda"));
-			$this->assertEquals($result['created_date'], "2020-10-08");
-			$this->assertEquals($result['tags'], "shipping address");
-			$this->assertEquals($result['status'], "unassigned");
+			$this->assertEqualsIgnoringCase($result['title'], "I am unable to click on recommended link");
+			$this->assertEqualsIgnoringCase($result['description'], "Link for recommended item does not work");
+			$this->assertEquals(new Account($result['created_by']), new Account("desc"));
+			$this->assertEquals($result['created_date'], "2020-11-15");
+			$this->assertEquals($result['tags'], "product page");
+			$this->assertEquals($result['status'], "assigned");
 			$this->assertNull($result['duplicate_of']);
 			$this->assertEquals(new Account(str_clean($as_user)), new Account("jepo"));
-			
-			$this->expectException(Exception::class);
-			$test1 = new Account($result['assigned_to']);
+			$this->assertEquals(new Account($result['assigned_to']), new Account("trba"));
 			
 			$this->expectException(Exception::class);
 			$test2 = new Account($result['reviewed_by']);
@@ -98,42 +96,42 @@
 			Tests the method to get Account object of creator
 		*/
 		function test_get_created_by(){
-			return $this->assertEquals($this->created_by, new Account("emda"));
+			return $this->assertEquals($this->created_by, new Account("desc"));
 		}
 		
 		/*
 			Tests the method to get date of ticket creation
 		*/
 		function test_get_created_date(){
-			return $this->assertEquals($this->created_date, "2020-10-08");
+			return $this->assertEquals($this->created_date, "2020-11-15");
 		}
 
 		/*
 			Tests the method to get title of ticket
 		*/
 		function test_get_title(){
-			return $this->assertEqualsIgnoringCase($this->title, "Cannot update shipping address");
+			return $this->assertEqualsIgnoringCase($this->title, "I am unable to click on recommended link");
 		}
 
 		/*
 			Tests the method to get description of ticket
 		*/
 		function test_get_description(){
-			return $this->assertEqualsIgnoringCase($this->description, "Users cannot update their shipping address from their profile page. No errors were returned on submit.");
+			return $this->assertEqualsIgnoringCase($this->description, "Link for recommended item does not work");
 		}
 
 		/*
 			Tests the method to get tags  of ticket
 		*/
 		function test_get_tags(){
-			return $this->assertEquals($this->tags, "shipping address");
+			return $this->assertEquals($this->tags, "product page");
 		}
 
 		/*
 			Tests the method to get status  of ticket
 		*/
 		function test_get_status(){
-			return $this->assertEquals($this->status, "unassigned");
+			return $this->assertEquals($this->status, "assigned");
 		}
 
 		/*
@@ -147,7 +145,7 @@
 			Tests the method to get developer assigned to ticket
 		*/
 		function test_get_assigned_to(){
-			return $this->assertIsNotObject($this->assigned_to);
+			return $this->assertEquals($this->assigned_to, new Account("trba"));
 		}
 
 		/*
