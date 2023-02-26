@@ -1,0 +1,46 @@
+pipeline:
+  name: glhf
+  identifier: glhf
+  projectIdentifier: Shantelle_Test
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: testStage
+        identifier: testStage
+        description: ""
+        type: Deployment
+        spec:
+          deploymentType: Kubernetes
+          service:
+            serviceRef: sample_service_1674797546369
+          environment:
+            environmentRef: dev_1674814771811
+            deployToAll: false
+            infrastructureDefinitions:
+              - identifier: devcluster_1674814771811
+          execution:
+            steps:
+              - step:
+                  name: Rollout Deployment
+                  identifier: rolloutDeployment
+                  type: K8sRollingDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+            rollbackSteps:
+              - step:
+                  name: Rollback Rollout Deployment
+                  identifier: rollbackRolloutDeployment
+                  type: K8sRollingRollback
+                  timeout: 10m
+                  spec:
+                    pruningEnabled: false
+        tags: {}
+        failureStrategies:
+          - onFailure:
+              errors:
+                - AllErrors
+              action:
+                type: StageRollback
