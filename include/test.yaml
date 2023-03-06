@@ -44,3 +44,20 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+    - stage:
+        name: test
+        identifier: test
+        description: ""
+        type: Pipeline
+        spec:
+          org: default
+          pipeline: Deploy_Sample_Pipeline_1674797564693
+          project: Shantelle_Test
+          outputs:
+            - name: test
+              value: <+proj.name>
+  variables:
+    - name: testVar
+      type: String
+      description: ""
+      value: <+input>
