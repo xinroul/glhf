@@ -1,0 +1,22 @@
+inputSet:
+  pipeline:
+    identifier: glhf
+    stages:
+      - stage:
+          identifier: testStage
+          type: Deployment
+          spec:
+            execution:
+              steps:
+                - step:
+                    identifier: ShellScript_1
+                    type: ShellScript
+                    timeout: <+project.tags>
+    variables:
+      - name: testVar
+        type: String
+        value: ""
+  name: test2
+  identifier: test2
+  orgIdentifier: default
+  projectIdentifier: Shantelle_Test
