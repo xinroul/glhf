@@ -1,0 +1,11 @@
+inputSet:
+  pipeline:
+    identifier: glhf
+    variables:
+      - name: testVar
+        type: String
+        value: ""
+  name: testTestVar
+  identifier: testTestVar
+  orgIdentifier: default
+  projectIdentifier: Shantelle_Test
