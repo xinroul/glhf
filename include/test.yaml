@@ -56,6 +56,8 @@ pipeline:
           outputs:
             - name: test
               value: <+proj.name>
+          inputSetReferences:
+            - testInput
   variables:
     - name: testVar
       type: String
