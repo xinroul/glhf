@@ -16,7 +16,7 @@ pipeline:
             serviceRef: sample_service_1674797546369
           environment:
             environmentRef: dev_1674814771811
-            deployToAll: false
+            deployToAll: true
             infrastructureDefinitions:
               - identifier: devcluster_1674814771811
           execution:
@@ -58,20 +58,6 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-    - stage:
-        name: test
-        identifier: test
-        description: ""
-        type: Pipeline
-        spec:
-          org: default
-          pipeline: Deploy_Sample_Pipeline_1674797564693
-          project: Shantelle_Test
-          outputs:
-            - name: test
-              value: <+proj.name>
-          inputSetReferences:
-            - testInput
     - stage:
         name: secStage
         identifier: ndStage
