@@ -7,7 +7,7 @@ pipeline:
   stages:
     - stage:
         name: testStage
-        identifier: testStage
+        identifier: testStages
         description: ""
         type: Deployment
         spec:
