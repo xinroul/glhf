@@ -8,7 +8,7 @@ pipeline:
     - stage:
         name: testStage
         identifier: testStagesgss
-        description: ""
+        description: sss
         type: Deployment
         spec:
           deploymentType: Kubernetes
