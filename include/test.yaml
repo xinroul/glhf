@@ -106,7 +106,8 @@ pipeline:
               action:
                 type: StageRollback
   variables:
-    - name: testVar
+    - name: timeoutValue
       type: String
-      description: ""
+      description: To be entered during run time.
+      required: false
       value: <+input>
