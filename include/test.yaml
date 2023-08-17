@@ -105,9 +105,3 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
-  variables:
-    - name: timeoutValue
-      type: String
-      description: To be entered during run time.
-      required: false
-      value: <+input>
