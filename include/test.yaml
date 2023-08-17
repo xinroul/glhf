@@ -42,7 +42,7 @@ pipeline:
                         script: echo "message"
                     environmentVariables: []
                     outputVariables: []
-                  timeout: 10s
+                  timeout: <+input>
             rollbackSteps:
               - step:
                   name: Rollback Rollout Deployment
