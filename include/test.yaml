@@ -105,3 +105,9 @@ pipeline:
                 - AllErrors
               action:
                 type: StageRollback
+  variables:
+    - name: timeoutVaue
+      type: Number
+      description: eter
+      required: false
+      value: 10
